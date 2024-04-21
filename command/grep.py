@@ -12,14 +12,16 @@ from storage.file_finder import get_absolute_path, resolve_patterns, traverse_di
 
 
 class Grep(ICommand):
-    def __init__(self, pattern: str, file_paths: List[str], recursive: bool = False):
+    def __init__(self, pattern: str, file_paths: List[str], recursive: bool = False, invert_match=False, count=True):
         self._pattern = pattern
         self._file_paths = file_paths
         self._recursive = recursive
+        self._invert_match = invert_match
+        self._count = count
 
     def execute(self) -> None:
         reader = TextFormatReader()
-        pattern_matcher = PatternMatcher([self._pattern])
+        pattern_matcher = PatternMatcher([self._pattern], match_whole_word=True)
 
         abs_paths = []
         for path in self._file_paths:
@@ -48,15 +50,32 @@ class Grep(ICommand):
             all_searched_paths.extend(resolved_paths)
 
         for path in all_searched_paths:
-            for line in reader.read_lines(path):
-                matched_positions = pattern_matcher.match(line)
-                if matched_positions:
-                    print_output(path, format_output(line, matched_positions))
+            line_number = 1
+
+            if self._count:
+                is_match_count = 0
+                for line in reader.read_lines(path):
+                    matched_positions = pattern_matcher.match(line)
+                    if matched_positions and not self._invert_match:
+                        is_match_count += 1
+                    if not matched_positions and self._invert_match:
+                        is_match_count += 1
+                    line_number += 1
+                print_count_output(path, is_match_count)
+            else:
+                for line in reader.read_lines(path):
+                    matched_positions = pattern_matcher.match(line)
+                    if matched_positions and not self._invert_match:
+                        print_output(path, format_output(line, matched_positions))
+                    if not matched_positions and self._invert_match:
+                        print_output(path, line)
+                    line_number += 1
 
 
 class PatternMatcher:
-    def __init__(self, patterns: List[str]) -> None:
+    def __init__(self, patterns: List[str], match_whole_word: bool) -> None:
         self._patterns = patterns
+        self._match_whole_word = match_whole_word
 
     def match(self, string: str) -> List[MatchPosition]:
         positions = []
@@ -65,13 +84,19 @@ class PatternMatcher:
                 positions.append(matched_position)
         return positions
 
-    @staticmethod
-    def _match(string: str, pattern: str) -> Iterator[MatchPosition]:
-        regex = re.compile(pattern)
+    def _match(self, string: str, pattern: str) -> Iterator[MatchPosition]:
+        regex = self._compile_regex(pattern)
         for match in regex.finditer(string):
             start_pos = match.start()
             end_pos = match.end()
             yield MatchPosition(start_pos, end_pos)
+
+    def _compile_regex(self, pattern):
+        return (
+            re.compile(r'\b{}\b'.format(re.escape(pattern)))
+            if self._match_whole_word
+            else re.compile(pattern)
+        )
 
 
 @dataclass
@@ -81,9 +106,14 @@ class MatchPosition:
 
 
 def print_output(path: Path, formatted_output: str, *args, **kwargs) -> None:
+    output_without_new_lines = formatted_output.replace("\n", "")
     print(
-        f"{path}: {formatted_output}", *args, **kwargs
+        f"{path}: {output_without_new_lines}", *args, **kwargs
     )
+
+
+def print_count_output(path: Path, num_of_matches) -> None:
+    print(f"{path}: {num_of_matches}")
 
 
 def get_relative_from_file_path(file_path: Path) -> Path:
@@ -107,7 +137,7 @@ def format_output(string: str, match_positions: List[MatchPosition]) -> str:
         )
         return formatted_string + _format_recursive(string, match_positions[1:], match_position.end)
 
-    return _format_recursive(string, match_positions, 0).replace("\n", "")
+    return _format_recursive(string, match_positions, 0)
 
 
 def colorize_text(text, color):
