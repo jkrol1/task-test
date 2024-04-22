@@ -8,7 +8,7 @@ from typing import Iterator, List
 
 from command.base import ICommand
 from storage.text_format_reader import TextFormatReader
-from storage.file_finder import get_absolute_path, resolve_patterns, traverse_directories
+from storage.path_resolver import PathResolver
 
 
 class Grep(ICommand):
@@ -22,34 +22,9 @@ class Grep(ICommand):
     def execute(self) -> None:
         reader = TextFormatReader()
         pattern_matcher = PatternMatcher([self._pattern], match_whole_word=True)
+        path_resolver = PathResolver(file_paths=self._file_paths, recursive=self._recursive)
 
-        abs_paths = []
-        for path in self._file_paths:
-            abs_path = get_absolute_path(path)
-            abs_paths.append(abs_path)
-
-        resolved_paths = []
-        for abs_path in abs_paths:
-            for resolved_path in resolve_patterns(abs_path):
-                if not resolved_path.name.startswith("."):
-                    if resolved_path.is_dir() and not self._recursive:
-                        print(f"grep: {resolved_path.name} is a directory")
-                    else:
-                        resolved_paths.append(resolved_path)
-
-        all_searched_paths = []
-        if self._recursive:
-            for resolved_path in resolved_paths:
-                if resolved_path.is_dir():
-                    for found_path in traverse_directories(resolved_path):
-                        if not found_path.name.startswith("."):
-                            all_searched_paths.append(found_path)
-                else:
-                    all_searched_paths.append(resolved_path)
-        else:
-            all_searched_paths.extend(resolved_paths)
-
-        for path in all_searched_paths:
+        for path in path_resolver.get_resolved_file_paths():
             line_number = 1
 
             if self._count:
@@ -99,7 +74,7 @@ class PatternMatcher:
         )
 
 
-@dataclass
+@dataclass(frozen=True)
 class MatchPosition:
     start: int
     end: int

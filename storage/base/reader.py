@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Generic, Iterator, Union
+from typing import Generic, Iterator
 
 from storage.base.type import IOType
 
