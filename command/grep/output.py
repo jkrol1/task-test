@@ -1,7 +1,7 @@
 from typing import Callable, List, Union, Optional
 from pathlib import Path
 
-from color import Color
+from command.grep.color import Color
 from match import MatchPosition
 
 DEFAULT_COLOR = Color.GREEN
