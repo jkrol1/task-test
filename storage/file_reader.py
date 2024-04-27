@@ -25,7 +25,8 @@ class FileReader(IFileReader):
                 else:
                     yield from self._read_as_text(file)
         except UnicodeDecodeError:
-            yield from self._read_as_binary(file)
+            with path.open("rb") as file:
+                yield from self._read_as_binary(file)
 
     @staticmethod
     def _is_binary_file(file: BinaryIO) -> bool:
