@@ -35,15 +35,5 @@ class PathResolver:
                 yield Path(root, file)
 
     @staticmethod
-    def _get_absolute_path(path: str) -> Path:
-        pathlib_path = Path(path)
-
-        return (
-            pathlib_path
-            if pathlib_path.is_absolute()
-            else pathlib_path.resolve()
-        )
-
-    @staticmethod
     def _resolve_patterns(path: Path) -> Generator[Path, None, None]:
         return path.parent.glob(path.name)
