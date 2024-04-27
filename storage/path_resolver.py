@@ -30,7 +30,7 @@ class PathResolver:
             yield resolved_path
 
     @staticmethod
-    def get_paths_from_dirs_recursively(dir_path: Path) -> Generator[Path, None, None]:
+    def _get_paths_from_dirs_recursively(dir_path: Path) -> Generator[Path, None, None]:
         for root, dirs, files in os.walk(str(dir_path)):
             for file in files:
                 yield Path(root, file)
