@@ -18,6 +18,8 @@ def create_cli_parser() -> ArgumentParser:
                         help="ignore case distinctions in patterns and data")
     parser.add_argument("-n", "--line-number", action="store_true",
                         help="print line number with output lines")
+    parser.add_argument("-B", "--before-context", type=int, help="print NUM lines of leading context")
+    parser.add_argument("-A", "--after-context", type=int, help="print NUM lines of trailing context")
     return parser
 
 
