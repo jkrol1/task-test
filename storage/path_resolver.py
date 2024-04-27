@@ -4,17 +4,16 @@ from typing import Generator, List
 
 
 class PathResolver:
-    def __init__(self, file_paths: List[str], include_hidden: bool = False, recursive: bool = False) -> None:
+    def __init__(self, file_paths: List[str], include_hidden: bool = True, recursive: bool = False) -> None:
         self._file_paths = file_paths
         self._include_hidden = include_hidden
         self._recursive = recursive
 
     def get_resolved_file_paths(self) -> Generator[Path, None, None]:
-        for path in self._file_paths:
-            abs_path = self._get_absolute_path(path)
-            yield from self._get_resolved_path_from_absolute_path(abs_path)
+        for path_str in self._file_paths:
+            yield from self._get_resolved_path(Path(path_str))
 
-    def _get_resolved_path_from_absolute_path(self, absolute_path: Path) -> Generator[Path, None, None]:
+    def _get_resolved_path(self, absolute_path: Path) -> Generator[Path, None, None]:
         for resolved_path in self._resolve_patterns(absolute_path):
             yield from self._process_resolved_path(resolved_path)
 
