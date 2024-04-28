@@ -3,7 +3,7 @@ from argparse import Namespace
 from command.grep import Grep
 from command.grep.input_processor import AfterContextLineMatchProcessor, BeforeContextLineMatchProcessor, \
     LineMatchCounterProcessor, LineMatchProcessor
-from command.grep.output import print_output_without_path
+from command.grep.output import print_output_without_path, print_output_with_path
 from match import PatternMatcher
 from storage.path_resolver import PathResolver
 from storage.file_reader import FileReader
@@ -35,7 +35,7 @@ def create_grep_from_cli_args(parsed_cli_args: Namespace) -> Grep:
     elif after_context:
         input_processor = AfterContextLineMatchProcessor(reader, pattern_matcher, print_output_without_path)
     else:
-        input_processor = LineMatchProcessor(reader, pattern_matcher, print_output_without_path)
+        input_processor = LineMatchProcessor(reader, pattern_matcher, print_output_with_path)
 
     return Grep(
         path_resolver=path_resolver,

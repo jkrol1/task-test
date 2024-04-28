@@ -33,7 +33,7 @@ class PatternMatcher(IPatternMatcher):
 
     def _get_matched_positions(self, string: str, compiled_regex: re.Pattern[str]) -> List[MatchPosition]:
         if self._invert_match:
-            if not self._is_match_found(string, compiled_regex):
+            if not self._is_match_found(string, compiled_regex):  # Think about removing this logic to the processing.
                 return [MatchPosition(0, len(string))]
         else:
             return [MatchPosition(match.start(), match.end()) for match in compiled_regex.finditer(string)]

@@ -4,7 +4,7 @@ from argparse import ArgumentParser, ArgumentTypeError, Namespace
 def create_cli_parser() -> ArgumentParser:
     parser = ArgumentParser(description="Python implementation of grep command")
     parser.add_argument("pattern", help="Pattern to search for in the file(s).")
-    parser.add_argument("files", nargs='+', help="Files to search in")
+    parser.add_argument("files", nargs='*', help="Files to search in")
     parser.add_argument("-e", "--pattern", action="append", dest="patterns", help="Additional pattern(s) to search for")
     parser.add_argument("-c", "--count", action="store_true",
                         help="prints only a count of selected lines per file")
@@ -20,6 +20,7 @@ def create_cli_parser() -> ArgumentParser:
                         help="print line number with output lines")
     parser.add_argument("-B", "--before-context", type=int, help="print NUM lines of leading context")
     parser.add_argument("-A", "--after-context", type=int, help="print NUM lines of trailing context")
+
     return parser
 
 
@@ -30,5 +31,14 @@ def merge_pattern_related_args(args: Namespace) -> Namespace:
         args.patterns = [args.pattern]
     else:
         args.files.insert(0, args.pattern)
+
+    return args
+
+
+def add_file_path_for_recursive(args: Namespace) -> Namespace:
+    if not args.files and not args.recursive:
+        raise ArgumentTypeError("Files argument is required")
+    if not args.files and args.recursive:
+        args.files.append("*")
 
     return args

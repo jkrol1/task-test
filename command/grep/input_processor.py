@@ -88,7 +88,7 @@ class AfterContextLineMatchProcessor(AbstractInputProcessor):
                     current_lines_to_print -= 1
             else:
                 if self._pattern_matcher.match_bytes(line):
-                    self._output_printer(path, line, matched_positions)
+                    self._output_printer(path, line)
                     current_lines_to_print = lines_to_print
                 elif current_lines_to_print:
                     self._output_printer(path, line)

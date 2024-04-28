@@ -2,8 +2,10 @@ import os
 from pathlib import Path
 from typing import Generator, List
 
+from storage.base import IPathResolver
 
-class PathResolver:
+
+class PathResolver(IPathResolver):
     def __init__(self, file_paths: List[str], include_hidden: bool = True, recursive: bool = False) -> None:
         self._file_paths = file_paths
         self._include_hidden = include_hidden
