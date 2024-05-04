@@ -1,25 +1,27 @@
+from io import BufferedReader
 from pathlib import Path
-from typing import BinaryIO, Generator
+from typing import Callable, Generator, Optional, Union
 
-from storage.base import DEFAULT_ENCODING, IFileReader, IOType
+from storage.base import DEFAULT_ENCODING, IFileReader, InputType
 
 
 class FileReader(IFileReader):
     def __init__(self, encoding: str = DEFAULT_ENCODING):
         self._encoding = encoding
+        self._on_input_type_change: Optional[Callable[[InputType], None]] = None
 
-    def read_lines(self, path: Path) -> Generator[IOType, None, None]:
+    def on_input_type_change(self, callback: Callable[[InputType], None]) -> None:
+        self._on_input_type_change = callback
+
+    def read_lines(self, path: Path) -> Generator[Union[str, bytes], None, None]:
         try:
             yield from self._read_lines(path)
-        except PermissionError:
-            print(f"grep: {path}: Permission denied")
-        except FileNotFoundError:
-            print(f"grep: {path}: No such file or directory")
         except UnicodeDecodeError:
             with path.open("rb") as file:
+                print(f"grep: unicode decode error. Trying to read {path} as binary")
                 yield from self._read_as_binary(file)
 
-    def _read_lines(self, path: Path) -> Generator[IOType, None, None]:
+    def _read_lines(self, path: Path) -> Generator[Union[str, bytes], None, None]:
         with path.open("rb") as file:
             if self._is_binary_file(file):
                 yield from self._read_as_binary(file)
@@ -27,10 +29,10 @@ class FileReader(IFileReader):
                 yield from self._read_as_text(file)
 
     @staticmethod
-    def _is_binary_file(file: BinaryIO) -> bool:
+    def _is_binary_file(file: BufferedReader) -> bool:
         try:
             data = file.peek(1024)
-            if b'\x00' in data:
+            if b"\x00" in data:
                 return True
         except Exception as e:
             print(f"Error checking file: {e}")
@@ -38,11 +40,16 @@ class FileReader(IFileReader):
 
     def _read_as_text(self, file) -> Generator[str, None, None]:
         file.seek(0)
+        self._notify_on_input_type_change(InputType.TEXT)
         for line in file:
-            yield line.decode(self._encoding).rstrip('\n')
+            yield line.decode(self._encoding).rstrip("\n")
 
-    @staticmethod
-    def _read_as_binary(file) -> Generator[bytes, None, None]:
+    def _read_as_binary(self, file) -> Generator[bytes, None, None]:
         file.seek(0)
+        self._notify_on_input_type_change(InputType.BINARY)
         for line in file:
             yield line
+
+    def _notify_on_input_type_change(self, file_type: InputType) -> None:
+        if self._on_input_type_change:
+            self._on_input_type_change(file_type)

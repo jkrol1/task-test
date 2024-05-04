@@ -2,17 +2,17 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
-from typing import List
+from typing import AnyStr, Generic, List, Optional
 
 
-class IPatternMatcher(ABC):
+class IPatternMatcher(ABC, Generic[AnyStr]):
 
     @abstractmethod
-    def match_string(self, string: str) -> List[MatchPosition]:
+    def match(self, input_val: AnyStr) -> Optional[List[MatchPosition]]:
         pass
 
     @abstractmethod
-    def match_bytes(self, bt: bytes) -> bool:
+    def search(self, input_val: AnyStr) -> Optional[MatchPosition]:
         pass
 
 

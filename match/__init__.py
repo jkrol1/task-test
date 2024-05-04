@@ -1,1 +1,7 @@
-from match.pattern_matcher import MatchPosition, PatternMatcher
+from match.base import IPatternMatcher
+from match.pattern_matcher import (
+    MatchPosition,
+    PatternMatcherTemplate,
+    BinaryPatternMatcher,
+    TextPatternMatcher,
+)

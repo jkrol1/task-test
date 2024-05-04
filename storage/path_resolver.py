@@ -6,7 +6,12 @@ from storage.base import IPathResolver
 
 
 class PathResolver(IPathResolver):
-    def __init__(self, file_paths: List[str], include_hidden: bool = True, recursive: bool = False) -> None:
+    def __init__(
+        self,
+        file_paths: List[str],
+        include_hidden: bool = True,
+        recursive: bool = False,
+    ) -> None:
         self._file_paths = file_paths
         self._include_hidden = include_hidden
         self._recursive = recursive
@@ -19,7 +24,9 @@ class PathResolver(IPathResolver):
         for resolved_path in self._resolve_patterns(absolute_path):
             yield from self._process_resolved_path(resolved_path)
 
-    def _process_resolved_path(self, resolved_path: Path) -> Generator[Path, None, None]:
+    def _process_resolved_path(
+        self, resolved_path: Path
+    ) -> Generator[Path, None, None]:
         if resolved_path.name.startswith(".") and not self._include_hidden:
             return
         elif resolved_path.is_dir():
