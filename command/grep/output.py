@@ -82,11 +82,6 @@ def add_line(processing_result: ProcessingOutput, context: Context) -> str:
             and not context.pattern_matching_options.invert_match
     ):
         return colorize(processing_result.line, processing_result.matches)
-
-    elif context.output_control_options.treat_binary_as_text and isinstance(
-            processing_result.line, bytes
-    ):
-        return processing_result.line.decode(DEFAULT_ENCODING, "replace")
     elif context.output_control_options.count:
         return str(processing_result.match_count)
     else:
