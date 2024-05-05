@@ -1,4 +1,5 @@
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
+from typing import Optional, List
 
 
 def create_cli_parser() -> ArgumentParser:
@@ -98,3 +99,23 @@ def add_file_path_for_recursive(args: Namespace) -> Namespace:
         args.files.append("*")
 
     return args
+
+
+def get_parsed_args(cli_parser: ArgumentParser, args: Optional[List[str]]) -> Namespace:
+    """
+    Parses the command-line arguments using the provided `ArgumentParser` instance
+    and returns a `Namespace` object containing the parsed arguments. Additionally,
+    merges pattern-related arguments and adds file paths for recursive operations.
+
+    :param ArgumentParser cli_parser: An instance of `ArgumentParser` configured with the desired
+                       command-line arguments and options.
+    :param Optional[List[str]] args: A list of strings representing the command-line arguments. If None,
+                 sys.argv is used.
+    :return: A `Namespace` object containing the parsed arguments, with pattern-related
+             arguments merged and file paths added for recursive operations.
+    :rtype: Namespace
+    """
+
+    return add_file_path_for_recursive(
+        merge_pattern_related_args(cli_parser.parse_args(args))
+    )

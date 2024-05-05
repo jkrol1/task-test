@@ -1,9 +1,11 @@
+from argparse import ArgumentParser
 from pathlib import Path
 from typing import Callable, List
 
 import pytest
 from pytest_mock import MockFixture
 
+from cli import create_cli_parser
 from storage.file_reader import FileReader
 
 
@@ -41,3 +43,8 @@ def tmp_txt_file(tmp_path: Path) -> Callable[[str], Path]:
 @pytest.fixture
 def file_reader() -> FileReader:
     return FileReader()
+
+
+@pytest.fixture
+def cli_parser() -> ArgumentParser:
+    return create_cli_parser()
