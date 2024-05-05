@@ -41,7 +41,7 @@ class FileReader(IFileReader):
             if b"\x00" in data:
                 return True
         except Exception as e:
-            print(f"Error checking file: {e}")
+            print(f"Error checking file {file.name}: {e}")
         return False
 
     def _read_as_text(self, file) -> Generator[str, None, None]:

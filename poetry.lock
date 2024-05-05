@@ -168,6 +168,20 @@ pluggy = ">=1.5,<2.0"
 dev = ["argcomplete", "attrs (>=19.2)", "hypothesis (>=3.56)", "mock", "pygments (>=2.7.2)", "requests", "setuptools", "xmlschema"]
 
 [[package]]
+name = "pytest-mock"
+version = "3.14.0"
+description = "Thin-wrapper around the mock package for easier use with pytest"
+category = "dev"
+optional = false
+python-versions = ">=3.8"
+
+[package.dependencies]
+pytest = ">=6.2.5"
+
+[package.extras]
+dev = ["pre-commit", "pytest-asyncio", "tox"]
+
+[[package]]
 name = "typing-extensions"
 version = "4.11.0"
 description = "Backported and Experimental Type Hints for Python 3.8+"
@@ -178,7 +192,7 @@ python-versions = ">=3.8"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.11"
-content-hash = "f1d8b3f1951b5da1575104f49515922de68707c3f9d32c03c40851cd5eb3813e"
+content-hash = "799283703de3eebe546464b9d2acf88d9c8e2eb83f193dce1d93429f5dfdb287"
 
 [metadata.files]
 black = []
@@ -199,4 +213,5 @@ pluggy = []
 pycodestyle = []
 pyflakes = []
 pytest = []
+pytest-mock = []
 typing-extensions = []
