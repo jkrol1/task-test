@@ -8,11 +8,6 @@ from storage.file_reader import FileReader
 
 
 @pytest.fixture
-def file_reader() -> FileReader:
-    return FileReader()
-
-
-@pytest.fixture
 def open_mock_with_set_read_data(mocker: MockFixture) -> Callable[[bytes, Callable[[int], bytes]], None]:
     def wrapper(file_content: bytes, peek_callable: Callable[[int], bytes]) -> None:
         mocked_read_data = mocker.mock_open(read_data=file_content)
@@ -41,3 +36,8 @@ def tmp_txt_file(tmp_path: Path) -> Callable[[str], Path]:
         return p
 
     return wrapper
+
+
+@pytest.fixture
+def file_reader() -> FileReader:
+    return FileReader()
