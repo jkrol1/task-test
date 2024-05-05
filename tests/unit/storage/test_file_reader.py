@@ -58,13 +58,12 @@ def test_handling_exception_on_is_binary_file_check(
         open_mock_with_set_read_data: Callable[[bytes, Callable[[int], bytes]], None],
         file_reader: FileReader,
         capsys: CaptureFixture[str]) -> None:
+    def _callable_with_generic_exception_raise(x: int) -> bytes:
+        raise Exception("error_msg")
+
     open_mock_with_set_read_data(b"test", _callable_with_generic_exception_raise)
     file_reader.read_lines(Path("path")).__next__()
     captured = capsys.readouterr()
     captured_output = captured.out
 
     assert re.match(r"Error checking file .*: error_msg\n", captured_output)
-
-
-def _callable_with_generic_exception_raise(x: int) -> bytes:
-    raise Exception("error_msg")

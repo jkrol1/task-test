@@ -4,8 +4,7 @@ from abc import abstractmethod, ABC
 from queue import Full, Queue
 from pathlib import Path
 from typing import Dict, Generator, Union
-
-from command.base import IInputProcessor, ProcessingOutput
+from command.grep.base import IInputProcessor, ProcessingOutput
 from match import IPatternMatcher
 from storage.base import InputType
 from storage.file_reader import IFileReader
@@ -135,11 +134,13 @@ class BeforeContextLineMatchProcessor(ContextualLineMatchProcessor):
         for line_num, line in enumerate(self._file_reader.read_lines(path)):
             if matched_positions := self._pattern_matcher.match(line):
                 while not queue.empty():
+                    output_line_number = line_num - queue.qsize() + 1
+                    output_line = queue.get()
                     yield ProcessingOutput(
                         matches=None,
                         path=path,
-                        line=queue.get(),
-                        line_number=line_num - queue.qsize() + 1,
+                        line_number=output_line_number,
+                        line=output_line,
                         input_type=self._input_type,
                     )
                 yield ProcessingOutput(

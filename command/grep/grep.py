@@ -2,7 +2,8 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from command.base import ICommand, IInputProcessor
+from command.base import ICommand
+from command.grep.base import IInputProcessor
 from command.grep.context import Context
 from command.grep.exceptions import SuppressBinaryOutputError
 from command.grep.input_processor import (
