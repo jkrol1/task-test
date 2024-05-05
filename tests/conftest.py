@@ -29,7 +29,7 @@ def mock_pathlib_path_glob(mocker: MockFixture) -> Callable[[List[Path]], None]:
 
 
 @pytest.fixture
-def tmp_txt_file(tmp_path: Path) -> Callable[[str], Path]:
+def tmp_text_file(tmp_path: Path) -> Callable[[str], Path]:
     def wrapper(file_content: str) -> Path:
         d = tmp_path / "sub"
         d.mkdir()
