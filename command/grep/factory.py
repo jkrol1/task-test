@@ -10,7 +10,6 @@ from command.grep import (
     BeforeContextLineMatchGrep,
     AfterContextLineMatchGrep,
 )
-
 from command.grep.output import create_output_message
 from command.grep.context import Context
 from match import BinaryPatternMatcher, TextPatternMatcher
@@ -20,6 +19,14 @@ from storage.file_reader import FileReader
 
 
 def create_grep_from_cli_args(parsed_cli_args: Namespace) -> Grep:
+    """
+    Create a Grep instance based on the parsed command-line arguments.
+
+    :param Namespace parsed_cli_args: Parsed command-line arguments as a Namespace object.
+    :return: A Grep instance based on the provided command-line arguments.
+    :rtype: Grep.
+    """
+
     context = Context.from_parsed_cli_args(parsed_cli_args)
     file_reader = FileReader()
     path_resolver = PathResolver(

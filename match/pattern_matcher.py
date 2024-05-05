@@ -2,15 +2,24 @@ from __future__ import annotations
 
 from abc import abstractmethod
 import re
-from typing import Generic, AnyStr, List, Optional, Pattern
+from typing import AnyStr, List, Optional, Pattern
 
 from command.grep.context import PatternMatchingOptions
 from match.base import IPatternMatcher, MatchPosition
 
 
 class PatternMatcherTemplate(IPatternMatcher[AnyStr]):
+    """
+    A template for pattern matchers.
+
+    Provides a template for implementing pattern matching operations.
+
+    :param List[str] patterns: A list of patterns to match against.
+    :param PatternMatchingOptions pattern_matching_options: Options for pattern matching.
+    """
+
     def __init__(
-        self, patterns: List[str], pattern_matching_options: PatternMatchingOptions
+            self, patterns: List[str], pattern_matching_options: PatternMatchingOptions
     ) -> None:
         self._patterns = patterns
         self._options = pattern_matching_options
@@ -40,6 +49,7 @@ class PatternMatcherTemplate(IPatternMatcher[AnyStr]):
 
 
 class BinaryPatternMatcher(PatternMatcherTemplate[bytes]):
+    """PatternMatcher for bytes input"""
 
     def match(self, input_val: bytes) -> Optional[List[MatchPosition]]:
         if match_position := self.search(input_val):
@@ -64,12 +74,13 @@ class BinaryPatternMatcher(PatternMatcherTemplate[bytes]):
 
 
 class TextPatternMatcher(PatternMatcherTemplate[str]):
+    """PatternMatcher for str input"""
 
     def match(self, input_val: str) -> List[MatchPosition]:
         positions = []
         for compiled_regex in self._compiled_regex_patterns:
             for matched_position in self._get_matched_positions(
-                input_val, compiled_regex
+                    input_val, compiled_regex
             ):
                 positions.append(matched_position)
         return positions
@@ -90,10 +101,10 @@ class TextPatternMatcher(PatternMatcherTemplate[str]):
         ]
 
     def _get_matched_positions(
-        self, input_val: str, compiled_regex: re.Pattern[str]
+            self, input_val: str, compiled_regex: re.Pattern[str]
     ) -> List[MatchPosition]:
         if self._options.invert_match and not self._is_match_found(
-            input_val, compiled_regex
+                input_val, compiled_regex
         ):
             return [MatchPosition(0, len(input_val))]
         return [

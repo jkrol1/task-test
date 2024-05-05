@@ -1,30 +1,49 @@
+from __future__ import annotations
+
 from abc import ABC, abstractmethod
 from enum import Enum
 from pathlib import Path
 import sys
 
-from typing import AnyStr, Generator, Generic, TypeVar
+from typing import AnyStr, Generator, Generic, Callable
 
 DEFAULT_ENCODING = sys.getdefaultencoding()
 
 
 class IFileReader(ABC, Generic[AnyStr]):
-    """FileReader Interface."""
+    """Interface for file readers."""
 
     @abstractmethod
     def read_lines(self, path: Path) -> Generator[AnyStr, None, None]:
+        """
+        Read lines from a file.
+
+        :param Path path: The path to the file.
+        :return: A generator yielding lines from the file.
+        :rtype: Generator[AnyStr, None, None].
+        """
         pass
 
     @abstractmethod
-    def on_input_type_change(self, callback) -> None:
-        pass
+    def on_input_change(self, callback: Callable[[InputType], None]) -> None:
+        """
+        Register a callback for input changes.
+
+        :param Callable[[InputType], None] callback: The callback function to be called when the input changes.
+        """
 
 
 class IPathResolver(ABC):
+    """Interface for path resolver objects."""
 
     @abstractmethod
     def get_resolved_file_paths(self) -> Generator[Path, None, None]:
-        pass
+        """
+        Get resolved file paths.
+
+        :return: A generator yielding resolved file paths.
+        :rtype: Generator[Path, None, None]
+        """
 
 
 class InputType(Enum):

@@ -3,6 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 
 from command.base import ICommand, IInputProcessor
+from command.grep.context import Context
 from command.grep.exceptions import SuppressBinaryOutputError
 from command.grep.input_processor import (
     InputTypeToPatternMatcherMapping,
@@ -16,13 +17,23 @@ from storage.base import IPathResolver, IFileReader
 
 
 class Grep(ICommand, ABC):
+    """
+    Grep implementation.
+
+    :param IFileReader file_reader: An instance of the file reader.
+    :param IPlathResolver path_resolver: An instance of the path resolver.
+    :param CreateOutputMessage create_output_message: A function to create output messages.
+    :param InputTypeToPatternMatcherMapping file_type_to_pattern_matcher_map: Mapping of input types to pattern matchers.
+    :param Context context: The context object containing options and controls for grep.
+    """
+
     def __init__(
-        self,
-        file_reader: IFileReader,
-        path_resolver: IPathResolver,
-        create_output_message: CreateOutputMessage,
-        file_type_to_pattern_matcher_map: InputTypeToPatternMatcherMapping,
-        context,
+            self,
+            file_reader: IFileReader,
+            path_resolver: IPathResolver,
+            create_output_message: CreateOutputMessage,
+            file_type_to_pattern_matcher_map: InputTypeToPatternMatcherMapping,
+            context: Context,
     ) -> None:
         self._file_reader = file_reader
         self._path_resolver = path_resolver
@@ -42,10 +53,18 @@ class Grep(ICommand, ABC):
 
     @abstractmethod
     def create_input_processor(self) -> IInputProcessor:
+        """
+        Create an input processor for the grep command.
+
+        :return: An instance of the input processor.
+        :rtype: IInputProcessor.
+        """
         pass
 
 
 class LineMatchGrep(Grep):
+    """A grep for line matching"""
+
     def create_input_processor(self) -> IInputProcessor:
         return LineMatchProcessor(
             self._file_reader, self._file_type_to_pattern_matcher_map
@@ -53,6 +72,8 @@ class LineMatchGrep(Grep):
 
 
 class LineMatchCounterGrep(Grep):
+    """A grep command for line match counting."""
+
     def create_input_processor(self) -> IInputProcessor:
         return LineMatchCounterProcessor(
             self._file_reader, self._file_type_to_pattern_matcher_map
@@ -60,6 +81,8 @@ class LineMatchCounterGrep(Grep):
 
 
 class BeforeContextLineMatchGrep(Grep):
+    """A grep command for before context line matching."""
+
     def create_input_processor(self) -> IInputProcessor:
         return BeforeContextLineMatchProcessor(
             self._file_reader,
@@ -69,6 +92,8 @@ class BeforeContextLineMatchGrep(Grep):
 
 
 class AfterContextLineMatchGrep(Grep):
+    """A grep command for after context line matching."""
+
     def create_input_processor(self) -> IInputProcessor:
         return AfterContextLineMatchProcessor(
             self._file_reader,

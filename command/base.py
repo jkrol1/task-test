@@ -10,15 +10,32 @@ from storage.base import InputType
 
 
 class ICommand(ABC):
+    """Interface for command objects."""
+
     @abstractmethod
     def execute(self) -> None:
+        """Execute the command."""
+
         pass
 
 
 class IInputProcessor(ABC):
+    """Interface for input processors.
+    
+    Input processors are responsible for orchestrating
+    pattern matching and applying specific logic on read file lines.
+    """
+
     @abstractmethod
     def process(self, path: Path) -> Generator[ProcessingOutput, None, None]:
-        pass
+        """
+         Process data from a file at a given path.
+
+         :param path: The path to the input.
+         :type path: pathlib.Path
+         :yield: Generator yielding ProcessingOutput objects.
+         :rtype: Generator[ProcessingOutput, None, None]
+        """
 
 
 @dataclass(frozen=True)

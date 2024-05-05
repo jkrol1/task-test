@@ -6,15 +6,23 @@ from storage.base import IPathResolver
 
 
 class PathResolver(IPathResolver):
+    """
+    A path resolver implementation for resolving file paths.
+
+    :param List[str] file_paths: A list of file path patterns.
+    :param bool include_hidden: Flag indicating whether to include hidden files (default is True).
+    :param bool recursive: Flag indicating whether to recursively search for files in directories (default is False).
+    """
+
     def __init__(
-        self,
-        file_paths: List[str],
-        include_hidden: bool = True,
-        recursive: bool = False,
+            self,
+            file_paths: List[str],
+            recursive: bool = False,
+            include_hidden: bool = True,
     ) -> None:
         self._file_paths = file_paths
-        self._include_hidden = include_hidden
         self._recursive = recursive
+        self._include_hidden = include_hidden
 
     def get_resolved_file_paths(self) -> Generator[Path, None, None]:
         for path_str in self._file_paths:
@@ -25,7 +33,7 @@ class PathResolver(IPathResolver):
             yield from self._process_resolved_path(resolved_path)
 
     def _process_resolved_path(
-        self, resolved_path: Path
+            self, resolved_path: Path
     ) -> Generator[Path, None, None]:
         if resolved_path.name.startswith(".") and not self._include_hidden:
             return

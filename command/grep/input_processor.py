@@ -14,12 +14,20 @@ InputTypeToPatternMatcherMapping = Dict[InputType, IPatternMatcher]
 
 
 class InputProcessorTemplate(IInputProcessor):
+    """
+    A template for input processors.
+
+    :param IFileReader file_reader: An instance of IFileReader for reading files.
+    :param InputTypeToPatternMatcherMapping pattern_matcher_map: A dictionary mapping
+    InputType to IPatternMatcher.
+    """
+
     def __init__(self, file_reader: IFileReader, pattern_matcher_map: Dict) -> None:
         self._pattern_matcher_map = pattern_matcher_map
         self._input_type = InputType.TEXT
         self._pattern_matcher = self._pattern_matcher_map[InputType.TEXT]
         self._file_reader = file_reader
-        self._file_reader.on_input_type_change(self._switch_input_type)
+        self._file_reader.on_input_change(self._switch_input_type)
 
     def process(self, path: Path) -> Generator[ProcessingOutput, None, None]:
         try:
@@ -31,15 +39,28 @@ class InputProcessorTemplate(IInputProcessor):
 
     @abstractmethod
     def _process(self, path: Path) -> Generator[ProcessingOutput, None, None]:
-        pass
+        """
+        Internal method for actual processing of the input data.
 
-    def _switch_input_type(self, file_type: InputType):
-        if file_type != self._input_type:
-            self._pattern_matcher = self._pattern_matcher_map[file_type]
-            self._input_type = file_type
+        :param Path path: The path to the input data file.
+        :yield: A generator of ProcessingOutput objects.
+        :rtype: Generator[ProcessingOutput, None, None].
+        """
+
+    def _switch_input_type(self, input_type: InputType) -> None:
+        """
+        Switch the object's input type and pattern matcher for the newly read input type.
+
+        :param InputType input_type: The new input type.
+        """
+        if input_type != self._input_type:
+            self._pattern_matcher = self._pattern_matcher_map[input_type]
+            self._input_type = input_type
 
 
 class LineMatchProcessor(InputProcessorTemplate):
+    """Processor for finding matching lines."""
+
     def _process(self, path: Path) -> Generator[ProcessingOutput, None, None]:
         for line_num, line in enumerate(self._file_reader.read_lines(path)):
             if matched_positions := self._pattern_matcher.match(line):
@@ -53,6 +74,8 @@ class LineMatchProcessor(InputProcessorTemplate):
 
 
 class LineMatchCounterProcessor(InputProcessorTemplate):
+    """Processor for finding and counting matching lines."""
+
     def _process(self, path: Path) -> Generator[ProcessingOutput, None, None]:
         match_count = 0
         for line in self._file_reader.read_lines(path):
@@ -69,14 +92,17 @@ class LineMatchCounterProcessor(InputProcessorTemplate):
 
 
 class ContextualLineMatchProcessor(InputProcessorTemplate, ABC):
+    """Processor for finding matching lines with specified context."""
+
     def __init__(
-        self, file_reader: IFileReader, pattern_matcher_map: Dict, context_size: int
-    ):
+            self, file_reader: IFileReader, pattern_matcher_map: Dict, context_size: int
+    ) -> None:
         super().__init__(file_reader, pattern_matcher_map)
         self._context_size = context_size
 
 
 class AfterContextLineMatchProcessor(ContextualLineMatchProcessor):
+    """Processor for finding matching lines with "after" context."""
 
     def _process(self, path: Path) -> Generator[ProcessingOutput, None, None]:
         current_lines_to_print = 0
@@ -102,6 +128,8 @@ class AfterContextLineMatchProcessor(ContextualLineMatchProcessor):
 
 
 class BeforeContextLineMatchProcessor(ContextualLineMatchProcessor):
+    """Processor for finding matching lines with "before" context."""
+
     def _process(self, path: Path) -> Generator[ProcessingOutput, None, None]:
         queue: Queue = Queue(maxsize=self._context_size)
         for line_num, line in enumerate(self._file_reader.read_lines(path)):

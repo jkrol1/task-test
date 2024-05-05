@@ -2,6 +2,13 @@ from argparse import ArgumentParser, ArgumentTypeError, Namespace
 
 
 def create_cli_parser() -> ArgumentParser:
+    """
+    Create a command-line interface (CLI) parser.
+
+    :return:The CLI parser.
+    :rtype: ArgumentParser.
+    """
+
     parser = ArgumentParser(description="Python implementation of grep command")
     parser.add_argument("pattern", help="Pattern to search for in the file(s).")
     parser.add_argument("files", nargs="*", help="Files to search in")
@@ -57,6 +64,15 @@ def create_cli_parser() -> ArgumentParser:
 
 
 def merge_pattern_related_args(args: Namespace) -> Namespace:
+    """
+    Merge pattern-related arguments into a single list.
+
+    :param Namespace args: The namespace containing parsed arguments.
+    :return: The modified namespace.
+    :rtype: Namespace
+    :raises ArgumentTypeError: Raises exception if no patterns are provided.
+    """
+
     if args.pattern is None and args.patterns is None:
         raise ArgumentTypeError("Either -e option or pattern argument is required.")
     elif args.patterns is None:
@@ -68,6 +84,14 @@ def merge_pattern_related_args(args: Namespace) -> Namespace:
 
 
 def add_file_path_for_recursive(args: Namespace) -> Namespace:
+    """
+    Add file path "*" for recursive search if no path was given.
+
+    :param args: Namespace, The namespace containing parsed arguments.
+    :return: Namespace, The modified namespace.
+    :raises ArgumentTypeError: raises exception if is not recursive
+     and no file names given
+    """
     if not args.files and not args.recursive:
         raise ArgumentTypeError("Files argument is required")
     if not args.files and args.recursive:

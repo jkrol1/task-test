@@ -6,12 +6,18 @@ from storage.base import DEFAULT_ENCODING, IFileReader, InputType
 
 
 class FileReader(IFileReader):
-    def __init__(self, encoding: str = DEFAULT_ENCODING):
-        self._encoding = encoding
-        self._on_input_type_change: Optional[Callable[[InputType], None]] = None
+    """
+    A file reader implementation for reading text and binary files.
 
-    def on_input_type_change(self, callback: Callable[[InputType], None]) -> None:
-        self._on_input_type_change = callback
+    :param str encoding: The encoding to use for reading text files.
+    """
+
+    def __init__(self, encoding: str = DEFAULT_ENCODING) -> None:
+        self._encoding = encoding
+        self._on_input_change: Optional[Callable[[InputType], None]] = None
+
+    def on_input_change(self, callback: Callable[[InputType], None]) -> None:
+        self._on_input_change = callback
 
     def read_lines(self, path: Path) -> Generator[Union[str, bytes], None, None]:
         try:
@@ -40,16 +46,16 @@ class FileReader(IFileReader):
 
     def _read_as_text(self, file) -> Generator[str, None, None]:
         file.seek(0)
-        self._notify_on_input_type_change(InputType.TEXT)
+        self._notify_on_input_change(InputType.TEXT)
         for line in file:
             yield line.decode(self._encoding).rstrip("\n")
 
     def _read_as_binary(self, file) -> Generator[bytes, None, None]:
         file.seek(0)
-        self._notify_on_input_type_change(InputType.BINARY)
+        self._notify_on_input_change(InputType.BINARY)
         for line in file:
             yield line
 
-    def _notify_on_input_type_change(self, file_type: InputType) -> None:
-        if self._on_input_type_change:
-            self._on_input_type_change(file_type)
+    def _notify_on_input_change(self, file_type: InputType) -> None:
+        if self._on_input_change:
+            self._on_input_change(file_type)
