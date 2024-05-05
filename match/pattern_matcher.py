@@ -30,10 +30,13 @@ class PatternMatcherTemplate(IPatternMatcher[AnyStr]):
     def search(self, input_val: AnyStr) -> Optional[MatchPosition]:
         for compiled_regex in self._compiled_regex_patterns:
             match = compiled_regex.search(input_val)
-            if match and not self._options.invert_match:
-                return MatchPosition(match.start(), match.end())
-            elif self._options.invert_match:
-                return MatchPosition(0, len(input_val))
+            if match:
+                if not self._options.invert_match:
+                    return MatchPosition(match.start(), match.end())
+                else:
+                    return None
+        if self._options.invert_match:
+            return MatchPosition(0, len(input_val))
         return None
 
     @abstractmethod
@@ -76,14 +79,11 @@ class BinaryPatternMatcher(PatternMatcherTemplate[bytes]):
 class TextPatternMatcher(PatternMatcherTemplate[str]):
     """PatternMatcher for str input"""
 
-    def match(self, input_val: str) -> List[MatchPosition]:
-        positions = []
+    def match(self, input_val: str) -> Optional[List[MatchPosition]]:
         for compiled_regex in self._compiled_regex_patterns:
-            for matched_position in self._get_matched_positions(
-                    input_val, compiled_regex
-            ):
-                positions.append(matched_position)
-        return positions
+            if matched_positions := self._get_matched_positions(input_val, compiled_regex):
+                return matched_positions
+        return None
 
     def _compile_regex_patterns(self) -> List[re.Pattern[str]]:
         flags = self._get_flags()
@@ -102,15 +102,17 @@ class TextPatternMatcher(PatternMatcherTemplate[str]):
 
     def _get_matched_positions(
             self, input_val: str, compiled_regex: re.Pattern[str]
-    ) -> List[MatchPosition]:
-        if self._options.invert_match and not self._is_match_found(
-                input_val, compiled_regex
-        ):
+    ) -> Optional[List[MatchPosition]]:
+        is_match_found = self._is_match_found(input_val, compiled_regex)
+        if self._options.invert_match and not is_match_found:
             return [MatchPosition(0, len(input_val))]
-        return [
-            MatchPosition(match.start(), match.end())
-            for match in compiled_regex.finditer(input_val)
-        ]
+        elif is_match_found and not self._options.invert_match:
+            return [
+                MatchPosition(match.start(), match.end())
+                for match in compiled_regex.finditer(input_val)
+            ]
+        else:
+            return None
 
     @staticmethod
     def _is_match_found(input_val: AnyStr, compiled_regex: re.Pattern[AnyStr]) -> bool:

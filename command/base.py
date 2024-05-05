@@ -20,9 +20,7 @@ class ICommand(ABC):
 
 
 class IInputProcessor(ABC):
-    """Interface for input processors.
-    
-    Input processors are responsible for orchestrating
+    """Interface for input processors. Input processors are responsible for orchestrating
     pattern matching and applying specific logic on read file lines.
     """
 

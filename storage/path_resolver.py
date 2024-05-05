@@ -7,7 +7,7 @@ from storage.base import IPathResolver
 
 class PathResolver(IPathResolver):
     """
-    A path resolver implementation for resolving file paths.
+    A path resolver implementation.
 
     :param List[str] file_paths: A list of file path patterns.
     :param bool include_hidden: Flag indicating whether to include hidden files (default is True).

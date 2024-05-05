@@ -76,9 +76,9 @@ def merge_pattern_related_args(args: Namespace) -> Namespace:
     if args.pattern is None and args.patterns is None:
         raise ArgumentTypeError("Either -e option or pattern argument is required.")
     elif args.patterns is None:
-        args.patterns = [args.pattern]
+        args.patterns = [rf"{args.pattern}"]
     else:
-        args.files.insert(0, args.pattern)
+        args.files.insert(0, rf"{args.pattern}")
 
     return args
 
