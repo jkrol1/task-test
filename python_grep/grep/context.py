@@ -63,5 +63,5 @@ class OutputControlOptions:
 
 @dataclass(frozen=True)
 class ContextControlOptions:
-    before_context: bool
-    after_context: bool
+    before_context: int
+    after_context: int

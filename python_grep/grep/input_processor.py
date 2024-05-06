@@ -6,6 +6,7 @@ from queue import Full, Queue
 from typing import Dict, Generator, Union
 
 from python_grep.grep.base import IInputProcessor, ProcessingOutput
+from python_grep.grep.context import ContextControlOptions
 from python_grep.match import IPatternMatcher
 from python_grep.storage import IFileReader, InputType
 
@@ -102,10 +103,10 @@ class ContextualLineMatchProcessor(InputProcessorTemplate, ABC):
         self,
         file_reader: IFileReader,
         pattern_matcher_map: Dict,
-        context_size: int,
+        context_control_options: ContextControlOptions,
     ) -> None:
         super().__init__(file_reader, pattern_matcher_map)
-        self._context_size = context_size
+        self._context_control_options = context_control_options
 
 
 class AfterContextLineMatchProcessor(ContextualLineMatchProcessor):
@@ -122,7 +123,9 @@ class AfterContextLineMatchProcessor(ContextualLineMatchProcessor):
                     input_type=self._input_type,
                     line_number=line_num + 1,
                 )
-                current_lines_to_print = self._context_size
+                current_lines_to_print = (
+                    self._context_control_options.after_context
+                )
             elif current_lines_to_print:
                 yield ProcessingOutput(
                     matches=None,
@@ -138,7 +141,9 @@ class BeforeContextLineMatchProcessor(ContextualLineMatchProcessor):
     """Processor for finding matching lines with "before" context."""
 
     def _process(self, path: Path) -> Generator[ProcessingOutput, None, None]:
-        queue: Queue = Queue(maxsize=self._context_size)
+        queue: Queue = Queue(
+            maxsize=self._context_control_options.before_context
+        )
         for line_num, line in enumerate(self._file_reader.read_lines(path)):
             if matched_positions := self._pattern_matcher.match(line):
                 while not queue.empty():

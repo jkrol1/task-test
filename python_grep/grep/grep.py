@@ -94,7 +94,7 @@ class BeforeContextLineMatchGrep(Grep):
         return BeforeContextLineMatchProcessor(
             self._file_reader,
             self._file_type_to_pattern_matcher_map,
-            self._context.context_control_options.before_context,
+            self._context.context_control_options,
         )
 
 
@@ -105,5 +105,5 @@ class AfterContextLineMatchGrep(Grep):
         return AfterContextLineMatchProcessor(
             self._file_reader,
             self._file_type_to_pattern_matcher_map,
-            self._context.context_control_options.after_context,
+            self._context.context_control_options,
         )

@@ -4,6 +4,7 @@ from _pytest.capture import CaptureFixture
 from pytest_mock import MockFixture
 
 from python_grep.grep.base import ProcessingOutput
+from python_grep.grep.context import ContextControlOptions
 from python_grep.grep.input_processor import (
     AfterContextLineMatchProcessor,
     BeforeContextLineMatchProcessor,
@@ -73,6 +74,7 @@ def test_line_match_counter_processor(mocker: MockFixture) -> None:
 def test_after_context_line_match_processor(mocker: MockFixture) -> None:
     mocked_file_reader = mocker.Mock()
     mocked_pattern_matcher = mocker.Mock()
+    context_control_options = ContextControlOptions(0, 2)
     mocked_file_reader.read_lines.return_value = (
         x for x in ["test1 line", "test2 line", "test3 line", "test4 line"]
     )
@@ -85,7 +87,9 @@ def test_after_context_line_match_processor(mocker: MockFixture) -> None:
 
     results = list(
         AfterContextLineMatchProcessor(
-            mocked_file_reader, {InputType.TEXT: mocked_pattern_matcher}, 2
+            mocked_file_reader,
+            {InputType.TEXT: mocked_pattern_matcher},
+            context_control_options,
         ).process(Path("path"))
     )
 
@@ -122,6 +126,7 @@ def test_after_context_line_match_processor(mocker: MockFixture) -> None:
 def test_before_context_line_match_processor(mocker: MockFixture) -> None:
     mocked_file_reader = mocker.Mock()
     mocked_pattern_matcher = mocker.Mock()
+    context_control_options = ContextControlOptions(2, 0)
     mocked_file_reader.read_lines.return_value = (
         x for x in ["test1 line", "test2 line", "test3 line", "test4 line"]
     )
@@ -134,7 +139,9 @@ def test_before_context_line_match_processor(mocker: MockFixture) -> None:
 
     results = list(
         BeforeContextLineMatchProcessor(
-            mocked_file_reader, {InputType.TEXT: mocked_pattern_matcher}, 2
+            mocked_file_reader,
+            {InputType.TEXT: mocked_pattern_matcher},
+            context_control_options,
         ).process(Path("path"))
     )
 
@@ -179,8 +186,8 @@ def test_file_permission_error_handling(
     mocked_file_reader.read_lines = _raise_file_permission_error
 
     list(
-        BeforeContextLineMatchProcessor(
-            mocked_file_reader, {InputType.TEXT: mocked_pattern_matcher}, 2
+        LineMatchProcessor(
+            mocked_file_reader, {InputType.TEXT: mocked_pattern_matcher}
         ).process(Path("path"))
     )
 
@@ -201,8 +208,8 @@ def test_file_not_found_error_handling(
     mocked_file_reader.read_lines = _raise_file_not_found_error
 
     list(
-        BeforeContextLineMatchProcessor(
-            mocked_file_reader, {InputType.TEXT: mocked_pattern_matcher}, 2
+        LineMatchProcessor(
+            mocked_file_reader, {InputType.TEXT: mocked_pattern_matcher}
         ).process(Path("path"))
     )
 
