@@ -5,8 +5,18 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Generator, List, Optional, Union
 
-from match import MatchPosition
-from storage.base import InputType
+from python_grep.match import MatchPosition
+from python_grep.storage.base import InputType
+
+
+class ICommand(ABC):
+    """Interface for command objects."""
+
+    @abstractmethod
+    def execute(self) -> None:
+        """Execute the command."""
+
+        pass
 
 
 class IInputProcessor(ABC):

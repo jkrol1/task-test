@@ -4,7 +4,7 @@ from typing import Callable
 
 from _pytest.capture import CaptureFixture
 
-from main import main
+from python_grep.main import main
 
 FILE_CONTENT = """Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n
 Sed at mauris euismod, ultricies ex at, venenatis ligula. bibendum mauris. Ut

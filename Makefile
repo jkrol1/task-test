@@ -27,7 +27,6 @@ lint: $(INSTALL_STAMP)
 
 .PHONY: format
 format: $(INSTALL_STAMP)
-		$(POETRY) run isort --profile=black .
 		$(POETRY) run black .
 
 .PHONY: test

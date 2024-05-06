@@ -5,10 +5,9 @@ from pathlib import Path
 from queue import Full, Queue
 from typing import Dict, Generator, Union
 
-from command.grep.base import IInputProcessor, ProcessingOutput
-from match import IPatternMatcher
-from storage.base import InputType
-from storage.file_reader import IFileReader
+from python_grep.grep.base import IInputProcessor, ProcessingOutput
+from python_grep.match import IPatternMatcher
+from python_grep.storage import IFileReader, InputType
 
 InputTypeToPatternMatcherMapping = Dict[InputType, IPatternMatcher]
 

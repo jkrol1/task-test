@@ -2,7 +2,7 @@ from io import BufferedReader
 from pathlib import Path
 from typing import Callable, Generator, Optional, Union
 
-from storage.base import DEFAULT_ENCODING, IFileReader, InputType
+from python_grep.storage.base import DEFAULT_ENCODING, IFileReader, InputType
 
 
 class FileReader(IFileReader):

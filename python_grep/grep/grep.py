@@ -2,19 +2,18 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from command.base import ICommand
-from command.grep.base import IInputProcessor
-from command.grep.context import Context
-from command.grep.exceptions import SuppressBinaryOutputError
-from command.grep.input_processor import (
+from python_grep.grep.base import ICommand, IInputProcessor
+from python_grep.grep.context import Context
+from python_grep.grep.exceptions import SuppressBinaryOutputError
+from python_grep.grep.input_processor import (
     AfterContextLineMatchProcessor,
     BeforeContextLineMatchProcessor,
     InputTypeToPatternMatcherMapping,
     LineMatchCounterProcessor,
     LineMatchProcessor,
 )
-from command.grep.output import CreateOutputMessage
-from storage.base import IFileReader, IPathResolver
+from python_grep.grep.output import CreateOutputMessage
+from python_grep.storage.base import IFileReader, IPathResolver
 
 
 class Grep(ICommand, ABC):

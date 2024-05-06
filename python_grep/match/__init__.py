@@ -1,7 +1,6 @@
-from match.base import IPatternMatcher
-from match.pattern_matcher import (
+from python_grep.match.base import IPatternMatcher, MatchPosition
+from python_grep.match.pattern_matcher import (
     BinaryPatternMatcher,
-    MatchPosition,
     PatternMatcherTemplate,
     TextPatternMatcher,
 )

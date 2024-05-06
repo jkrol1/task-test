@@ -1,5 +1,9 @@
-from command.grep.context import PatternMatchingOptions
-from match import BinaryPatternMatcher, MatchPosition, TextPatternMatcher
+from python_grep.grep.context import PatternMatchingOptions
+from python_grep.match import (
+    BinaryPatternMatcher,
+    MatchPosition,
+    TextPatternMatcher,
+)
 
 
 def test_binary_pattern_matcher_search() -> None:

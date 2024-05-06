@@ -6,8 +6,7 @@ import pytest
 from _pytest.capture import CaptureFixture
 from pytest_mock import MockFixture
 
-from storage.base import InputType
-from storage.file_reader import FileReader
+from python_grep.storage import FileReader, InputType
 
 
 @pytest.mark.parametrize(

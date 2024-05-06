@@ -1,7 +1,7 @@
 from typing import List, Optional
 
-from cli import create_cli_parser, get_parsed_args
-from command.grep.factory import create_grep_from_cli_args
+from python_grep.cli import create_cli_parser, get_parsed_args
+from python_grep.grep import create_grep_from_cli_args
 
 
 def main(args: Optional[List[str]] = None) -> None:

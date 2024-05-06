@@ -4,12 +4,12 @@ import pytest
 from _pytest.capture import CaptureFixture
 from pytest_mock import MockFixture
 
-from command.grep import LineMatchGrep
-from command.grep.base import ProcessingOutput
-from command.grep.context import Context
-from command.grep.exceptions import SuppressBinaryOutputError
-from match import MatchPosition
-from storage.base import InputType
+from python_grep.grep.base import ProcessingOutput
+from python_grep.grep.context import Context
+from python_grep.grep.grep import LineMatchGrep
+from python_grep.grep.output import SuppressBinaryOutputError
+from python_grep.match import MatchPosition
+from python_grep.storage import InputType
 
 
 @pytest.fixture

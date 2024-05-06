@@ -3,15 +3,15 @@ from typing import List, Type
 
 import pytest
 
-from cli import get_parsed_args
-from command.grep import (
+from python_grep.cli import get_parsed_args
+from python_grep.grep.factory import create_grep_from_cli_args
+from python_grep.grep.grep import (
     AfterContextLineMatchGrep,
     BeforeContextLineMatchGrep,
     Grep,
     LineMatchCounterGrep,
     LineMatchGrep,
 )
-from command.grep.factory import create_grep_from_cli_args
 
 
 @pytest.mark.parametrize(

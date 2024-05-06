@@ -4,7 +4,7 @@ from typing import Callable, List
 from _pytest.capture import CaptureFixture
 from pytest_mock import MockFixture
 
-from storage.path_resolver import PathResolver
+from python_grep.storage import PathResolver
 
 
 def test_get_resolved_file_paths(

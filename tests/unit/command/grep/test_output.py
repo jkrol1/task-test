@@ -2,22 +2,22 @@ from pathlib import Path
 
 import pytest
 
-from command.grep.base import ProcessingOutput
-from command.grep.context import (
+from python_grep.grep.base import ProcessingOutput
+from python_grep.grep.context import (
     Context,
     ContextControlOptions,
     OutputControlOptions,
     PatternMatchingOptions,
 )
-from command.grep.output import (
+from python_grep.grep.output import (
     add_file_name,
     add_line,
     add_line_num,
     colorize,
     create_output_message,
 )
-from match import MatchPosition
-from storage.base import InputType
+from python_grep.match import MatchPosition
+from python_grep.storage import InputType
 
 
 @pytest.fixture

@@ -5,8 +5,8 @@ from typing import Callable, List
 import pytest
 from pytest_mock import MockFixture
 
-from cli import create_cli_parser
-from storage.file_reader import FileReader
+from python_grep.cli import create_cli_parser
+from python_grep.storage import FileReader
 
 
 @pytest.fixture

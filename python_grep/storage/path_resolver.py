@@ -2,7 +2,7 @@ import os
 from pathlib import Path
 from typing import Generator, List
 
-from storage.base import IPathResolver
+from python_grep.storage.base import IPathResolver
 
 
 class PathResolver(IPathResolver):

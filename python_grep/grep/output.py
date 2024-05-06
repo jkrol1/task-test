@@ -1,15 +1,13 @@
 from __future__ import annotations
 
+from enum import Enum
 from typing import Callable, List
 
-from command.grep.color import Color
-from command.grep.context import Context
-from command.grep.exceptions import SuppressBinaryOutputError
-from command.grep.input_processor import ProcessingOutput
-from match import MatchPosition
-from storage.base import DEFAULT_ENCODING
-
-DEFAULT_COLOR = Color.GREEN
+from python_grep.grep.base import ProcessingOutput
+from python_grep.grep.context import Context
+from python_grep.grep.exceptions import SuppressBinaryOutputError
+from python_grep.match import MatchPosition
+from python_grep.storage import DEFAULT_ENCODING
 
 CreateOutputMessage = Callable[[ProcessingOutput, Context], str]
 
@@ -112,7 +110,7 @@ def colorize(line: str, match_positions: List[MatchPosition]) -> str:
 
         match_position = match_positions[0]
         formatted_string = line[index : match_position.start] + _colorize_text(
-            line[match_position.start : match_position.end], DEFAULT_COLOR
+            line[match_position.start : match_position.end], Color.GREEN
         )
         return formatted_string + _format_recursive(
             line, match_positions[1:], match_position.end
@@ -123,3 +121,13 @@ def colorize(line: str, match_positions: List[MatchPosition]) -> str:
 
 def _colorize_text(text, color) -> str:
     return f"{color.value}{text}{Color.END.value}"
+
+
+class Color(Enum):
+    RED = "\033[91m"
+    GREEN = "\033[92m"
+    YELLOW = "\033[93m"
+    BLUE = "\033[94m"
+    MAGENTA = "\033[95m"
+    CYAN = "\033[96m"
+    END = "\033[0m"

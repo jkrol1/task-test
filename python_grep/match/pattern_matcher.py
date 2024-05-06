@@ -4,8 +4,8 @@ import re
 from abc import abstractmethod
 from typing import AnyStr, List, Optional, Pattern
 
-from command.grep.context import PatternMatchingOptions
-from match.base import IPatternMatcher, MatchPosition
+from python_grep.grep.context import PatternMatchingOptions
+from python_grep.match.base import IPatternMatcher, MatchPosition
 
 
 class PatternMatcherTemplate(IPatternMatcher[AnyStr]):

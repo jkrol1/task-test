@@ -3,15 +3,15 @@ from pathlib import Path, PosixPath
 from _pytest.capture import CaptureFixture
 from pytest_mock import MockFixture
 
-from command.grep.base import ProcessingOutput
-from command.grep.input_processor import (
+from python_grep.grep.base import ProcessingOutput
+from python_grep.grep.input_processor import (
     AfterContextLineMatchProcessor,
     BeforeContextLineMatchProcessor,
     LineMatchCounterProcessor,
     LineMatchProcessor,
 )
-from match import MatchPosition
-from storage.base import InputType
+from python_grep.match import MatchPosition
+from python_grep.storage import InputType
 
 
 def test_line_match_processor(mocker: MockFixture) -> None:
