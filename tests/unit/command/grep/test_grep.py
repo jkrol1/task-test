@@ -1,6 +1,4 @@
 from pathlib import Path
-from typing import Any
-from unittest.mock import patch
 
 import pytest
 from _pytest.capture import CaptureFixture
@@ -44,13 +42,15 @@ def mocked_line_match_grep(mocker: MockFixture) -> LineMatchGrep:
         context,
     )
 
-    mocker.patch.object(grep, "create_input_processor", return_value=input_processor)
+    mocker.patch.object(
+        grep, "create_input_processor", return_value=input_processor
+    )
 
     return grep
 
 
 def test_grep_execute(
-        mocked_line_match_grep: LineMatchGrep, capsys: CaptureFixture[str]
+    mocked_line_match_grep: LineMatchGrep, capsys: CaptureFixture[str]
 ) -> None:
     mocked_line_match_grep.execute()
     captured = capsys.readouterr()
@@ -60,10 +60,10 @@ def test_grep_execute(
 
 
 def test_suppress_binary_output_error_handling(
-        mocked_line_match_grep: LineMatchGrep, capsys: CaptureFixture[str]
+    mocked_line_match_grep: LineMatchGrep, capsys: CaptureFixture[str]
 ) -> None:
     def _raise_suppress_binary_output_exception(
-            _: ProcessingOutput, _2: Context
+        _: ProcessingOutput, _2: Context
     ) -> str:
         raise SuppressBinaryOutputError
 

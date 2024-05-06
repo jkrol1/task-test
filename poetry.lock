@@ -84,6 +84,20 @@ pycodestyle = ">=2.11.0,<2.12.0"
 pyflakes = ">=3.2.0,<3.3.0"
 
 [[package]]
+name = "flake8-pyproject"
+version = "1.2.3"
+description = "Flake8 plug-in loading the configuration from pyproject.toml"
+category = "dev"
+optional = false
+python-versions = ">= 3.6"
+
+[package.dependencies]
+Flake8 = ">=5"
+
+[package.extras]
+dev = ["pytest", "pytest-cov"]
+
+[[package]]
 name = "iniconfig"
 version = "2.0.0"
 description = "brain-dead simple config-ini parsing"
@@ -332,7 +346,7 @@ python-versions = ">=3.8"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.11"
-content-hash = "8a182474aa20556ccd27d5a16535724f41143e9385abc718330ffb691ce89bcb"
+content-hash = "04175e4153a231c479096f30758fd76d1e3f94bf53c4d8e95239213e46a03f80"
 
 [metadata.files]
 bandit = []
@@ -341,6 +355,7 @@ click = []
 colorama = []
 coverage = []
 flake8 = []
+flake8-pyproject = []
 iniconfig = []
 isort = []
 markdown-it-py = []
