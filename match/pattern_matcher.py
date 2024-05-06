@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from abc import abstractmethod
 import re
+from abc import abstractmethod
 from typing import AnyStr, List, Optional, Pattern
 
 from command.grep.context import PatternMatchingOptions

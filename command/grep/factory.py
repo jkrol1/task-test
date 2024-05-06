@@ -2,20 +2,20 @@ from __future__ import annotations
 
 from argparse import Namespace
 
-from command.grep.input_processor import InputTypeToPatternMatcherMapping
 from command.grep import (
-    Grep,
-    LineMatchGrep,
-    LineMatchCounterGrep,
-    BeforeContextLineMatchGrep,
     AfterContextLineMatchGrep,
+    BeforeContextLineMatchGrep,
+    Grep,
+    LineMatchCounterGrep,
+    LineMatchGrep,
 )
-from command.grep.output import create_output_message
 from command.grep.context import Context
+from command.grep.input_processor import InputTypeToPatternMatcherMapping
+from command.grep.output import create_output_message
 from match import BinaryPatternMatcher, TextPatternMatcher
 from storage.base import InputType
-from storage.path_resolver import PathResolver
 from storage.file_reader import FileReader
+from storage.path_resolver import PathResolver
 
 
 def create_grep_from_cli_args(parsed_cli_args: Namespace) -> Grep:

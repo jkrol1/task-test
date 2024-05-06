@@ -5,16 +5,16 @@ import pytest
 from command.grep.base import ProcessingOutput
 from command.grep.context import (
     Context,
-    PatternMatchingOptions,
-    OutputControlOptions,
     ContextControlOptions,
+    OutputControlOptions,
+    PatternMatchingOptions,
 )
 from command.grep.output import (
-    create_output_message,
     add_file_name,
-    add_line_num,
     add_line,
+    add_line_num,
     colorize,
+    create_output_message,
 )
 from match import MatchPosition
 from storage.base import InputType

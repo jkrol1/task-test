@@ -3,7 +3,7 @@ from __future__ import annotations
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Generator, Optional, List, Union
+from typing import Generator, List, Optional, Union
 
 from match import MatchPosition
 from storage.base import InputType

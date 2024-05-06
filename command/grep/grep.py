@@ -7,14 +7,14 @@ from command.grep.base import IInputProcessor
 from command.grep.context import Context
 from command.grep.exceptions import SuppressBinaryOutputError
 from command.grep.input_processor import (
-    InputTypeToPatternMatcherMapping,
-    LineMatchProcessor,
-    LineMatchCounterProcessor,
-    BeforeContextLineMatchProcessor,
     AfterContextLineMatchProcessor,
+    BeforeContextLineMatchProcessor,
+    InputTypeToPatternMatcherMapping,
+    LineMatchCounterProcessor,
+    LineMatchProcessor,
 )
 from command.grep.output import CreateOutputMessage
-from storage.base import IPathResolver, IFileReader
+from storage.base import IFileReader, IPathResolver
 
 
 class Grep(ICommand, ABC):
@@ -32,12 +32,12 @@ class Grep(ICommand, ABC):
     """
 
     def __init__(
-            self,
-            file_reader: IFileReader,
-            path_resolver: IPathResolver,
-            create_output_message: CreateOutputMessage,
-            file_type_to_pattern_matcher_map: InputTypeToPatternMatcherMapping,
-            context: Context,
+        self,
+        file_reader: IFileReader,
+        path_resolver: IPathResolver,
+        create_output_message: CreateOutputMessage,
+        file_type_to_pattern_matcher_map: InputTypeToPatternMatcherMapping,
+        context: Context,
     ) -> None:
         self._file_reader = file_reader
         self._path_resolver = path_resolver

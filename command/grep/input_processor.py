@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-from abc import abstractmethod, ABC
-from queue import Full, Queue
+from abc import ABC, abstractmethod
 from pathlib import Path
+from queue import Full, Queue
 from typing import Dict, Generator, Union
+
 from command.grep.base import IInputProcessor, ProcessingOutput
 from match import IPatternMatcher
 from storage.base import InputType
@@ -24,7 +25,7 @@ class InputProcessorTemplate(IInputProcessor):
     """
 
     def __init__(
-            self, file_reader: IFileReader, pattern_matcher_map: Dict
+        self, file_reader: IFileReader, pattern_matcher_map: Dict
     ) -> None:
         self._pattern_matcher_map = pattern_matcher_map
         self._input_type = InputType.TEXT
@@ -99,10 +100,10 @@ class ContextualLineMatchProcessor(InputProcessorTemplate, ABC):
     """Processor for finding matching lines with specified context."""
 
     def __init__(
-            self,
-            file_reader: IFileReader,
-            pattern_matcher_map: Dict,
-            context_size: int,
+        self,
+        file_reader: IFileReader,
+        pattern_matcher_map: Dict,
+        context_size: int,
     ) -> None:
         super().__init__(file_reader, pattern_matcher_map)
         self._context_size = context_size

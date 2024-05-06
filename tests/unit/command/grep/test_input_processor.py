@@ -169,7 +169,7 @@ def test_before_context_line_match_processor(mocker: MockFixture) -> None:
 
 
 def test_file_permission_error_handling(
-        mocker: MockFixture, capsys: CaptureFixture[str]
+    mocker: MockFixture, capsys: CaptureFixture[str]
 ) -> None:
     def _raise_file_permission_error(_: Path) -> None:
         raise PermissionError
@@ -191,7 +191,7 @@ def test_file_permission_error_handling(
 
 
 def test_file_not_found_error_handling(
-        mocker: MockFixture, capsys: CaptureFixture[str]
+    mocker: MockFixture, capsys: CaptureFixture[str]
 ) -> None:
     def _raise_file_not_found_error(_: Path) -> None:
         raise FileNotFoundError

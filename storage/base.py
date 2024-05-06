@@ -1,11 +1,10 @@
 from __future__ import annotations
 
+import sys
 from abc import ABC, abstractmethod
 from enum import Enum
 from pathlib import Path
-import sys
-
-from typing import AnyStr, Generator, Generic, Callable
+from typing import AnyStr, Callable, Generator, Generic
 
 DEFAULT_ENCODING = sys.getdefaultencoding()
 

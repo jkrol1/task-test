@@ -4,14 +4,14 @@ from typing import List, Type
 import pytest
 
 from cli import get_parsed_args
-from command.grep.factory import create_grep_from_cli_args
 from command.grep import (
-    Grep,
-    LineMatchGrep,
-    LineMatchCounterGrep,
-    BeforeContextLineMatchGrep,
     AfterContextLineMatchGrep,
+    BeforeContextLineMatchGrep,
+    Grep,
+    LineMatchCounterGrep,
+    LineMatchGrep,
 )
+from command.grep.factory import create_grep_from_cli_args
 
 
 @pytest.mark.parametrize(

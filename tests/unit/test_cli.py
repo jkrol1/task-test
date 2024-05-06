@@ -1,8 +1,8 @@
-from argparse import Namespace, ArgumentTypeError
+from argparse import ArgumentTypeError, Namespace
 
 import pytest
 
-from cli import merge_pattern_related_args, add_file_path_for_recursive
+from cli import add_file_path_for_recursive, merge_pattern_related_args
 
 
 def test_merge_pattern_related_args_only_pattern() -> None:

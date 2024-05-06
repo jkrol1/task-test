@@ -17,9 +17,9 @@ nunc"""
 
 
 def test_e2e(
-        tmp_text_file: Callable[[str], Path],
-        cli_parser: ArgumentParser,
-        capsys: CaptureFixture[str],
+    tmp_text_file: Callable[[str], Path],
+    cli_parser: ArgumentParser,
+    capsys: CaptureFixture[str],
 ):
     file = tmp_text_file(FILE_CONTENT)
     file_path = str(file)
@@ -34,9 +34,9 @@ def test_e2e(
 
 
 def test_e2e_count(
-        tmp_text_file: Callable[[str], Path],
-        cli_parser: ArgumentParser,
-        capsys: CaptureFixture[str],
+    tmp_text_file: Callable[[str], Path],
+    cli_parser: ArgumentParser,
+    capsys: CaptureFixture[str],
 ):
     file = tmp_text_file(FILE_CONTENT)
     file_path = str(file)

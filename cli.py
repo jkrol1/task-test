@@ -1,5 +1,5 @@
 from argparse import ArgumentParser, ArgumentTypeError, Namespace
-from typing import Optional, List
+from typing import List, Optional
 
 
 def create_cli_parser() -> ArgumentParser:
@@ -44,7 +44,7 @@ def create_cli_parser() -> ArgumentParser:
         "--recursive",
         action="store_true",
         help="prints the searched pattern in the given directory "
-             "recursively in all the files",
+        "recursively in all the files",
     )
     parser.add_argument(
         "-v",
@@ -126,7 +126,7 @@ def add_file_path_for_recursive(args: Namespace) -> Namespace:
 
 
 def get_parsed_args(
-        cli_parser: ArgumentParser, args: Optional[List[str]]
+    cli_parser: ArgumentParser, args: Optional[List[str]]
 ) -> Namespace:
     """
     Parses the command-line arguments using the provided
