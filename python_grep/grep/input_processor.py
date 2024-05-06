@@ -30,7 +30,7 @@ class InputProcessorTemplate(IInputProcessor):
         self._input_type = InputType.TEXT
         self._pattern_matcher = self._pattern_matcher_map[InputType.TEXT]
         self._file_reader = file_reader
-        self._file_reader.on_input_change(self._switch_input_type)
+        self._file_reader.before_file_traverse_hook(self._switch_input_type)
 
     def process(self, path: Path) -> Generator[ProcessingOutput, None, None]:
         try:
@@ -53,9 +53,9 @@ class InputProcessorTemplate(IInputProcessor):
     def _switch_input_type(self, input_type: InputType) -> None:
         """
         Switch the object's input type and pattern matcher
-        for the newly read input type.
+        for the newly read file.
 
-        :param InputType input_type: The new input type.
+        :param InputType input_type: Traversed file input type.
         """
         if input_type != self._input_type:
             self._pattern_matcher = self._pattern_matcher_map[input_type]

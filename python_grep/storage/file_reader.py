@@ -14,10 +14,14 @@ class FileReader(IFileReader):
 
     def __init__(self, encoding: str = DEFAULT_ENCODING) -> None:
         self._encoding = encoding
-        self._on_input_change: Optional[Callable[[InputType], None]] = None
+        self._before_file_traverse: Optional[Callable[[InputType], None]] = (
+            None
+        )
 
-    def on_input_change(self, callback: Callable[[InputType], None]) -> None:
-        self._on_input_change = callback
+    def before_file_traverse_hook(
+        self, callback: Callable[[InputType], None]
+    ) -> None:
+        self._before_file_traverse = callback
 
     def read_lines(
         self, path: Path
@@ -53,16 +57,16 @@ class FileReader(IFileReader):
 
     def _read_as_text(self, file) -> Generator[str, None, None]:
         file.seek(0)
-        self._notify_on_input_change(InputType.TEXT)
+        self._notify_before_file_traverse(InputType.TEXT)
         for line in file:
             yield line.decode(self._encoding).rstrip("\n")
 
     def _read_as_binary(self, file) -> Generator[bytes, None, None]:
         file.seek(0)
-        self._notify_on_input_change(InputType.BINARY)
+        self._notify_before_file_traverse(InputType.BINARY)
         for line in file:
             yield line
 
-    def _notify_on_input_change(self, file_type: InputType) -> None:
-        if self._on_input_change:
-            self._on_input_change(file_type)
+    def _notify_before_file_traverse(self, file_type: InputType) -> None:
+        if self._before_file_traverse:
+            self._before_file_traverse(file_type)

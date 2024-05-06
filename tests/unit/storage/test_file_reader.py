@@ -48,7 +48,7 @@ def test_on_input_change(
     expected_input_type: InputType,
 ) -> None:
     mock_callback = mocker.Mock()
-    file_reader.on_input_change(mock_callback)
+    file_reader.before_file_traverse_hook(mock_callback)
     open_mock_with_set_read_data(file_content, peek_callable)
     file_reader.read_lines(Path("path")).__next__()
 

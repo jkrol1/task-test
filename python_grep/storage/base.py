@@ -24,12 +24,14 @@ class IFileReader(ABC, Generic[AnyStr]):
         pass
 
     @abstractmethod
-    def on_input_change(self, callback: Callable[[InputType], None]) -> None:
+    def before_file_traverse_hook(
+        self, callback: Callable[[InputType], None]
+    ) -> None:
         """
-        Register a callback for input changes.
+        Register a callback which notifies before file is traversed.
 
         :param Callable[[InputType], None] callback: The callback function
-         to be called when the input changes.
+         to be called before iterating through file.
         """
 
 
