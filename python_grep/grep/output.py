@@ -4,41 +4,43 @@ from enum import Enum
 from typing import Callable, List
 
 from python_grep.grep.base import ProcessingOutput
-from python_grep.grep.context import Context
+from python_grep.grep.context import OutputControlOptions
 from python_grep.grep.exceptions import SuppressBinaryOutputError
 from python_grep.match import MatchPosition
 from python_grep.storage import DEFAULT_ENCODING
 
-CreateOutputMessage = Callable[[ProcessingOutput, Context], str]
+CreateOutputMessage = Callable[[ProcessingOutput, OutputControlOptions], str]
 
 
 def create_output_message(
-    processing_output: ProcessingOutput, context: Context
+    processing_output: ProcessingOutput,
+    output_control_options: OutputControlOptions,
 ) -> str:
     """
     Create an output message based on processing output and context.
 
     :param ProcessingOutput processing_output: The processing output.
-    :param Context context: The context for processing.
+    :param OutputControlOptions output_control_options: Output control options.
     :return: The formatted output message.
     :rtype: str.
     """
 
     return (
-        add_file_name(processing_output, context)
-        + add_line_num(processing_output, context)
-        + add_line(processing_output, context)
+        add_file_name(processing_output, output_control_options)
+        + add_line_num(processing_output, output_control_options)
+        + add_line(processing_output, output_control_options)
     )
 
 
 def add_file_name(
-    processing_result: ProcessingOutput, context: Context
+    processing_result: ProcessingOutput,
+    output_control_options: OutputControlOptions,
 ) -> str:
     """
     Add file name to the output message.
 
     :param ProcessingOutput processing_result: The processing result.
-    :param Context context: The context for processing.
+    :param OutputControlOptions output_control_options: Output control options.
     :return: The formatted file name string.
     :rtype: str.
     """
@@ -46,27 +48,33 @@ def add_file_name(
     return f"{processing_result.path}:"
 
 
-def add_line_num(processing_result: ProcessingOutput, context: Context) -> str:
+def add_line_num(
+    processing_result: ProcessingOutput,
+    output_control_options: OutputControlOptions,
+) -> str:
     """
     Add line number to the output message if specified in the context.
 
     :param ProcessingOutput processing_result: The processing result.
-    :param Context context: The context for processing.
+    :param Context output_control_options: Output control options.
     :return: The formatted line number string.
     :rtype: str.
     """
 
-    if context.output_control_options.line_number:
+    if output_control_options.line_number:
         return f"{processing_result.line_number}:"
     return ""
 
 
-def add_line(processing_result: ProcessingOutput, context: Context) -> str:
+def add_line(
+    processing_result: ProcessingOutput,
+    output_control_options: OutputControlOptions,
+) -> str:
     """
     Add line content to the output message.
 
     :param ProcessingOutput processing_result: The processing result.
-    :param Context context: The context for processing.
+    :param Context output_control_options: Output control options.
     :return: The formatted line content string.
     :rtype: str.
     :raises SuppressBinaryOutputError: If binary output is not allowed
@@ -74,18 +82,14 @@ def add_line(processing_result: ProcessingOutput, context: Context) -> str:
     """
 
     if isinstance(processing_result.line, bytes):
-        if context.output_control_options.treat_binary_as_text:
+        if output_control_options.treat_binary_as_text:
             return processing_result.line.decode(DEFAULT_ENCODING, "replace")
         else:
             raise SuppressBinaryOutputError
 
-    elif (
-        processing_result.matches
-        and context.output_control_options.color
-        and not context.pattern_matching_options.invert_match
-    ):
+    elif processing_result.matches and output_control_options.color:
         return colorize(processing_result.line, processing_result.matches)
-    elif context.output_control_options.count:
+    elif output_control_options.count:
         return str(processing_result.match_count)
     else:
         return processing_result.line

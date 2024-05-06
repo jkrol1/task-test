@@ -39,7 +39,7 @@ class PatternMatcherTemplate(IPatternMatcher[AnyStr]):
                 else:
                     return None
         if self._options.invert_match:
-            return MatchPosition(0, len(input_val))
+            return MatchPosition(0, 0)
         return None
 
     @abstractmethod
@@ -110,7 +110,7 @@ class TextPatternMatcher(PatternMatcherTemplate[str]):
     ) -> Optional[List[MatchPosition]]:
         is_match_found = self._is_match_found(input_val, compiled_regex)
         if self._options.invert_match and not is_match_found:
-            return [MatchPosition(0, len(input_val))]
+            return [MatchPosition(0, 0)]
         elif is_match_found and not self._options.invert_match:
             return [
                 MatchPosition(match.start(), match.end())

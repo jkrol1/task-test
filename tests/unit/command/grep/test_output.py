@@ -4,10 +4,7 @@ import pytest
 
 from python_grep.grep.base import ProcessingOutput
 from python_grep.grep.context import (
-    Context,
-    ContextControlOptions,
     OutputControlOptions,
-    PatternMatchingOptions,
 )
 from python_grep.grep.output import (
     add_file_name,
@@ -33,54 +30,44 @@ def processing_output():
 
 
 @pytest.fixture
-def context():
-    return Context(
-        patterns=[""],
-        file_paths=[""],
-        output_control_options=OutputControlOptions(
-            line_number=True,
-            recursive=False,
-            color=True,
-            count=False,
-            treat_binary_as_text=False,
-        ),
-        pattern_matching_options=PatternMatchingOptions(
-            invert_match=False, word_regexp=False, ignore_case=False
-        ),
-        context_control_options=ContextControlOptions(
-            before_context=False, after_context=False
-        ),
+def output_control_options():
+    return OutputControlOptions(
+        line_number=True,
+        recursive=False,
+        color=True,
+        count=False,
+        treat_binary_as_text=False,
     )
 
 
 def test_create_output_message(
-    processing_output: ProcessingOutput, context: Context
+    processing_output: ProcessingOutput, output_control_options
 ) -> None:
-    message = create_output_message(processing_output, context)
+    message = create_output_message(processing_output, output_control_options)
     expected_message = "file.txt:10:Test \x1b[92mli\x1b[0mne"
     assert message == expected_message
 
 
 def test_add_file_name(
-    processing_output: ProcessingOutput, context: Context
+    processing_output: ProcessingOutput, output_control_options
 ) -> None:
-    file_name = add_file_name(processing_output, context)
+    file_name = add_file_name(processing_output, output_control_options)
     expected_file_name = "file.txt:"
     assert file_name == expected_file_name
 
 
 def test_add_line_num(
-    processing_output: ProcessingOutput, context: Context
+    processing_output: ProcessingOutput, output_control_options
 ) -> None:
-    line_num = add_line_num(processing_output, context)
+    line_num = add_line_num(processing_output, output_control_options)
     expected_line_num = "10:"
     assert line_num == expected_line_num
 
 
 def test_add_line(
-    processing_output: ProcessingOutput, context: Context
+    processing_output: ProcessingOutput, output_control_options
 ) -> None:
-    line = add_line(processing_output, context)
+    line = add_line(processing_output, output_control_options)
     expected_line = "Test \x1b[92mli\x1b[0mne"
     assert line == expected_line
 

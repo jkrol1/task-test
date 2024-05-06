@@ -5,7 +5,7 @@ from _pytest.capture import CaptureFixture
 from pytest_mock import MockFixture
 
 from python_grep.grep.base import ProcessingOutput
-from python_grep.grep.context import Context
+from python_grep.grep.context import OutputControlOptions
 from python_grep.grep.grep import LineMatchGrep
 from python_grep.grep.output import SuppressBinaryOutputError
 from python_grep.match import MatchPosition
@@ -63,7 +63,7 @@ def test_suppress_binary_output_error_handling(
     mocked_line_match_grep: LineMatchGrep, capsys: CaptureFixture[str]
 ) -> None:
     def _raise_suppress_binary_output_exception(
-        _: ProcessingOutput, _2: Context
+        _: ProcessingOutput, _2: OutputControlOptions
     ) -> str:
         raise SuppressBinaryOutputError
 

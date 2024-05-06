@@ -52,7 +52,7 @@ class Grep(ICommand, ABC):
             try:
                 for result in input_processor.process(path):
                     output_message = self._create_output_message(
-                        result, self._context
+                        result, self._context.output_control_options
                     )
                     print(output_message)
             except SuppressBinaryOutputError:
