@@ -7,7 +7,9 @@ from pytest_mock import MockFixture
 from storage.path_resolver import PathResolver
 
 
-def test_get_resolved_file_paths(mock_pathlib_path_glob: Callable[[List[Path]], None]) -> None:
+def test_get_resolved_file_paths(
+    mock_pathlib_path_glob: Callable[[List[Path]], None]
+) -> None:
     mock_pathlib_path_glob([Path("test1.txt"), Path("test2.txt")])
     path_resolver = PathResolver(["*.txt"])
     resolved_paths = list(path_resolver.get_resolved_file_paths())
@@ -19,9 +21,11 @@ def test_get_resolved_file_paths(mock_pathlib_path_glob: Callable[[List[Path]], 
     assert all(path in resolved_paths for path in expected_files)
 
 
-def test_is_dir_message_on_path_resolving(mock_pathlib_path_glob: Callable[[List[Path]], None],
-                                          mocker: MockFixture,
-                                          capsys: CaptureFixture[str]):
+def test_is_dir_message_on_path_resolving(
+    mock_pathlib_path_glob: Callable[[List[Path]], None],
+    mocker: MockFixture,
+    capsys: CaptureFixture[str],
+):
     mock_pathlib_path_glob([Path("test1")])
     path_resolver = PathResolver(["test1"])
     mock = mocker.patch("pathlib.Path.is_dir")

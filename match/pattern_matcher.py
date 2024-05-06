@@ -15,11 +15,14 @@ class PatternMatcherTemplate(IPatternMatcher[AnyStr]):
     Provides a template for implementing pattern matching operations.
 
     :param List[str] patterns: A list of patterns to match against.
-    :param PatternMatchingOptions pattern_matching_options: Options for pattern matching.
+    :param PatternMatchingOptions pattern_matching_options: Options
+     for pattern matching.
     """
 
     def __init__(
-            self, patterns: List[str], pattern_matching_options: PatternMatchingOptions
+        self,
+        patterns: List[str],
+        pattern_matching_options: PatternMatchingOptions,
     ) -> None:
         self._patterns = patterns
         self._options = pattern_matching_options
@@ -81,7 +84,9 @@ class TextPatternMatcher(PatternMatcherTemplate[str]):
 
     def match(self, input_val: str) -> Optional[List[MatchPosition]]:
         for compiled_regex in self._compiled_regex_patterns:
-            if matched_positions := self._get_matched_positions(input_val, compiled_regex):
+            if matched_positions := self._get_matched_positions(
+                input_val, compiled_regex
+            ):
                 return matched_positions
         return None
 
@@ -101,7 +106,7 @@ class TextPatternMatcher(PatternMatcherTemplate[str]):
         ]
 
     def _get_matched_positions(
-            self, input_val: str, compiled_regex: re.Pattern[str]
+        self, input_val: str, compiled_regex: re.Pattern[str]
     ) -> Optional[List[MatchPosition]]:
         is_match_found = self._is_match_found(input_val, compiled_regex)
         if self._options.invert_match and not is_match_found:
@@ -115,5 +120,7 @@ class TextPatternMatcher(PatternMatcherTemplate[str]):
             return None
 
     @staticmethod
-    def _is_match_found(input_val: AnyStr, compiled_regex: re.Pattern[AnyStr]) -> bool:
+    def _is_match_found(
+        input_val: AnyStr, compiled_regex: re.Pattern[AnyStr]
+    ) -> bool:
         return bool(compiled_regex.search(input_val))

@@ -5,3 +5,11 @@ from match.pattern_matcher import (
     BinaryPatternMatcher,
     TextPatternMatcher,
 )
+
+__all__ = [
+    BinaryPatternMatcher,
+    IPatternMatcher,
+    MatchPosition,
+    PatternMatcherTemplate,
+    TextPatternMatcher,
+]

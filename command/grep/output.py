@@ -14,7 +14,9 @@ DEFAULT_COLOR = Color.GREEN
 CreateOutputMessage = Callable[[ProcessingOutput, Context], str]
 
 
-def create_output_message(processing_output: ProcessingOutput, context: Context) -> str:
+def create_output_message(
+        processing_output: ProcessingOutput, context: Context
+) -> str:
     """
     Create an output message based on processing output and context.
 
@@ -31,7 +33,9 @@ def create_output_message(processing_output: ProcessingOutput, context: Context)
     )
 
 
-def add_file_name(processing_result: ProcessingOutput, context: Context) -> str:
+def add_file_name(
+        processing_result: ProcessingOutput, context: Context
+) -> str:
     """
     Add file name to the output message.
 
@@ -67,7 +71,8 @@ def add_line(processing_result: ProcessingOutput, context: Context) -> str:
     :param Context context: The context for processing.
     :return: The formatted line content string.
     :rtype: str.
-    :raises SuppressBinaryOutputError: If binary output is not allowed and the line is binary.
+    :raises SuppressBinaryOutputError: If binary output is not allowed
+    and the line is binary.
     """
 
     if isinstance(processing_result.line, bytes):
@@ -93,7 +98,8 @@ def colorize(line: str, match_positions: List[MatchPosition]) -> str:
     Colorize matched text in the line.
 
     :param str line: The line content.
-    :param List[MatchPosition] match_positions: The positions of matches in the line.
+    :param List[MatchPosition] match_positions: The positions of
+     matches in the line.
     :return: The colorized line content.
     :rtype: str.
     """

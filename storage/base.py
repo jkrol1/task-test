@@ -29,7 +29,8 @@ class IFileReader(ABC, Generic[AnyStr]):
         """
         Register a callback for input changes.
 
-        :param Callable[[InputType], None] callback: The callback function to be called when the input changes.
+        :param Callable[[InputType], None] callback: The callback function
+         to be called when the input changes.
         """
 
 

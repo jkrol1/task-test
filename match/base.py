@@ -11,16 +11,16 @@ class IPatternMatcher(ABC, Generic[AnyStr]):
     @abstractmethod
     def match(self, input_val: AnyStr) -> Optional[List[MatchPosition]]:
         """
-          Perform a full match operation.
+        Perform a full match operation.
 
-          Attempts to match the entire input string with the pattern and
-          returns match position of every single match.
+        Attempts to match the entire input string with the pattern and
+        returns match position of every single match.
 
-          :param AnyStr input_val: The input value to match against.
-          :return: A list of MatchPosition objects representing the matches,
-                   or None if no matches are found.
-          :rtype: Optional[List[MatchPosition]],
-          """
+        :param AnyStr input_val: The input value to match against.
+        :return: A list of MatchPosition objects representing the matches,
+                 or None if no matches are found.
+        :rtype: Optional[List[MatchPosition]],
+        """
 
     @abstractmethod
     def search(self, input_val: AnyStr) -> Optional[MatchPosition]:

@@ -7,12 +7,16 @@ from cli import merge_pattern_related_args, add_file_path_for_recursive
 
 def test_merge_pattern_related_args_only_pattern() -> None:
     args = merge_pattern_related_args(Namespace(pattern="test", patterns=None))
-    assert args.patterns == ['test']
+    assert args.patterns == ["test"]
 
 
 def test_merge_pattern_related_args_only_option_e() -> None:
-    args = merge_pattern_related_args(Namespace(pattern=None, patterns=["pattern1", "pattern2"], files=["test.txt"]))
-    assert args.patterns == ['pattern1', 'pattern2']
+    args = merge_pattern_related_args(
+        Namespace(
+            pattern=None, patterns=["pattern1", "pattern2"], files=["test.txt"]
+        )
+    )
+    assert args.patterns == ["pattern1", "pattern2"]
 
 
 def test_merge_pattern_related_args_no_pattern_or_option_e() -> None:

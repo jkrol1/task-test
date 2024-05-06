@@ -10,15 +10,17 @@ class PathResolver(IPathResolver):
     A path resolver implementation.
 
     :param List[str] file_paths: A list of file path patterns.
-    :param bool include_hidden: Flag indicating whether to include hidden files (default is True).
-    :param bool recursive: Flag indicating whether to recursively search for files in directories (default is False).
+    :param bool include_hidden: Flag indicating whether to include
+     hidden files (default is True).
+    :param bool recursive: Flag indicating whether to recursively
+     search for files in directories (default is False).
     """
 
     def __init__(
-            self,
-            file_paths: List[str],
-            recursive: bool = False,
-            include_hidden: bool = True,
+        self,
+        file_paths: List[str],
+        recursive: bool = False,
+        include_hidden: bool = True,
     ) -> None:
         self._file_paths = file_paths
         self._recursive = recursive
@@ -28,12 +30,14 @@ class PathResolver(IPathResolver):
         for path_str in self._file_paths:
             yield from self._get_resolved_path(Path(path_str))
 
-    def _get_resolved_path(self, absolute_path: Path) -> Generator[Path, None, None]:
+    def _get_resolved_path(
+        self, absolute_path: Path
+    ) -> Generator[Path, None, None]:
         for resolved_path in self._resolve_patterns(absolute_path):
             yield from self._process_resolved_path(resolved_path)
 
     def _process_resolved_path(
-            self, resolved_path: Path
+        self, resolved_path: Path
     ) -> Generator[Path, None, None]:
         if resolved_path.name.startswith(".") and not self._include_hidden:
             return
@@ -46,7 +50,9 @@ class PathResolver(IPathResolver):
             yield resolved_path
 
     @staticmethod
-    def _get_paths_from_dirs_recursively(dir_path: Path) -> Generator[Path, None, None]:
+    def _get_paths_from_dirs_recursively(
+        dir_path: Path,
+    ) -> Generator[Path, None, None]:
         for root, dirs, files in os.walk(str(dir_path)):
             for file in files:
                 yield Path(root, file)

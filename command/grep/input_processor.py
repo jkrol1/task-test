@@ -16,12 +16,16 @@ class InputProcessorTemplate(IInputProcessor):
     """
     A template for input processors.
 
-    :param IFileReader file_reader: An instance of IFileReader for reading files.
-    :param InputTypeToPatternMatcherMapping pattern_matcher_map: A dictionary mapping
+    :param IFileReader file_reader: An instance of IFileReader
+     for reading files.
+    :param InputTypeToPatternMatcherMapping pattern_matcher_map:
+     A dictionary mapping
     InputType to IPatternMatcher.
     """
 
-    def __init__(self, file_reader: IFileReader, pattern_matcher_map: Dict) -> None:
+    def __init__(
+            self, file_reader: IFileReader, pattern_matcher_map: Dict
+    ) -> None:
         self._pattern_matcher_map = pattern_matcher_map
         self._input_type = InputType.TEXT
         self._pattern_matcher = self._pattern_matcher_map[InputType.TEXT]
@@ -48,7 +52,8 @@ class InputProcessorTemplate(IInputProcessor):
 
     def _switch_input_type(self, input_type: InputType) -> None:
         """
-        Switch the object's input type and pattern matcher for the newly read input type.
+        Switch the object's input type and pattern matcher
+        for the newly read input type.
 
         :param InputType input_type: The new input type.
         """
@@ -94,7 +99,10 @@ class ContextualLineMatchProcessor(InputProcessorTemplate, ABC):
     """Processor for finding matching lines with specified context."""
 
     def __init__(
-            self, file_reader: IFileReader, pattern_matcher_map: Dict, context_size: int
+            self,
+            file_reader: IFileReader,
+            pattern_matcher_map: Dict,
+            context_size: int,
     ) -> None:
         super().__init__(file_reader, pattern_matcher_map)
         self._context_size = context_size

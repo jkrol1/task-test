@@ -23,9 +23,12 @@ class Grep(ICommand, ABC):
 
     :param IFileReader file_reader: An instance of the file reader.
     :param IPlathResolver path_resolver: An instance of the path resolver.
-    :param CreateOutputMessage create_output_message: A function to create output messages.
-    :param InputTypeToPatternMatcherMapping file_type_to_pattern_matcher_map: Mapping of input types to pattern matchers.
-    :param Context context: The context object containing options and controls for grep.
+    :param CreateOutputMessage create_output_message: A function to
+    create output messages.
+    :param InputTypeToPatternMatcherMapping file_type_to_pattern_matcher_map:
+    Mapping of input types to pattern matchers.
+    :param Context context: The context object containing options and
+    controls for grep.
     """
 
     def __init__(
@@ -39,7 +42,9 @@ class Grep(ICommand, ABC):
         self._file_reader = file_reader
         self._path_resolver = path_resolver
         self._create_output_message = create_output_message
-        self._file_type_to_pattern_matcher_map = file_type_to_pattern_matcher_map
+        self._file_type_to_pattern_matcher_map = (
+            file_type_to_pattern_matcher_map
+        )
         self._context = context
 
     def execute(self) -> None:
@@ -47,7 +52,9 @@ class Grep(ICommand, ABC):
         for path in self._path_resolver.get_resolved_file_paths():
             try:
                 for result in input_processor.process(path):
-                    output_message = self._create_output_message(result, self._context)
+                    output_message = self._create_output_message(
+                        result, self._context
+                    )
                     print(output_message)
             except SuppressBinaryOutputError:
                 print(f"Binary file {path} matches")

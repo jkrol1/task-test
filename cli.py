@@ -10,8 +10,12 @@ def create_cli_parser() -> ArgumentParser:
     :rtype: ArgumentParser.
     """
 
-    parser = ArgumentParser(description="Python implementation of grep command")
-    parser.add_argument("pattern", help="Pattern to search for in the file(s).")
+    parser = ArgumentParser(
+        description="Python implementation of grep command"
+    )
+    parser.add_argument(
+        "pattern", help="Pattern to search for in the file(s)."
+    )
     parser.add_argument("files", nargs="*", help="Files to search in")
     parser.add_argument(
         "-e",
@@ -27,20 +31,32 @@ def create_cli_parser() -> ArgumentParser:
         help="prints only a count of selected lines per file",
     )
     parser.add_argument(
-        "-a", "--text", action="store_true", help="assume binary files are of type text"
+        "-a",
+        "--text",
+        action="store_true",
+        help="assume binary files are of type text",
     )
-    parser.add_argument("--color", action="store_true", help="Enable colored output")
+    parser.add_argument(
+        "--color", action="store_true", help="Enable colored output"
+    )
     parser.add_argument(
         "-r",
         "--recursive",
         action="store_true",
-        help="prints the searched pattern in the given directory recursively in all the files",
+        help="prints the searched pattern in the given directory "
+             "recursively in all the files",
     )
     parser.add_argument(
-        "-v", "--invert-match", action="store_true", help="select non-matching lines"
+        "-v",
+        "--invert-match",
+        action="store_true",
+        help="select non-matching lines",
     )
     parser.add_argument(
-        "-w", "--word-regexp", action="store_true", help="match only whole words"
+        "-w",
+        "--word-regexp",
+        action="store_true",
+        help="match only whole words",
     )
     parser.add_argument(
         "-i",
@@ -55,10 +71,16 @@ def create_cli_parser() -> ArgumentParser:
         help="print line number with output lines",
     )
     parser.add_argument(
-        "-B", "--before-context", type=int, help="print NUM lines of leading context"
+        "-B",
+        "--before-context",
+        type=int,
+        help="print NUM lines of leading context",
     )
     parser.add_argument(
-        "-A", "--after-context", type=int, help="print NUM lines of trailing context"
+        "-A",
+        "--after-context",
+        type=int,
+        help="print NUM lines of trailing context",
     )
 
     return parser
@@ -75,7 +97,9 @@ def merge_pattern_related_args(args: Namespace) -> Namespace:
     """
 
     if args.pattern is None and args.patterns is None:
-        raise ArgumentTypeError("Either -e option or pattern argument is required.")
+        raise ArgumentTypeError(
+            "Either -e option or pattern argument is required."
+        )
     elif args.patterns is None:
         args.patterns = [rf"{args.pattern}"]
     else:
@@ -101,18 +125,23 @@ def add_file_path_for_recursive(args: Namespace) -> Namespace:
     return args
 
 
-def get_parsed_args(cli_parser: ArgumentParser, args: Optional[List[str]]) -> Namespace:
+def get_parsed_args(
+        cli_parser: ArgumentParser, args: Optional[List[str]]
+) -> Namespace:
     """
-    Parses the command-line arguments using the provided `ArgumentParser` instance
-    and returns a `Namespace` object containing the parsed arguments. Additionally,
-    merges pattern-related arguments and adds file paths for recursive operations.
+    Parses the command-line arguments using the provided
+    `ArgumentParser` instance and returns a `Namespace` object
+    containing the parsed arguments. Additionally,
+    merges pattern-related arguments and adds file paths for
+    recursive operations.
 
-    :param ArgumentParser cli_parser: An instance of `ArgumentParser` configured with the desired
-                       command-line arguments and options.
-    :param Optional[List[str]] args: A list of strings representing the command-line arguments. If None,
-                 sys.argv is used.
-    :return: A `Namespace` object containing the parsed arguments, with pattern-related
-             arguments merged and file paths added for recursive operations.
+    :param ArgumentParser cli_parser: An instance of `ArgumentParser`
+    configured with the desired command-line arguments and options.
+    :param Optional[List[str]] args: A list of strings representing
+    the command-line arguments. If None, sys.argv is used.
+    :return: A `Namespace` object containing the parsed arguments,
+     with pattern-related arguments merged and file paths added for
+     recursive operations.
     :rtype: Namespace
     """
 

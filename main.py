@@ -1,9 +1,6 @@
 from typing import List, Optional
 
-from cli import (
-    create_cli_parser,
-    get_parsed_args
-)
+from cli import create_cli_parser, get_parsed_args
 from command.grep.factory import create_grep_from_cli_args
 
 

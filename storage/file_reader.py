@@ -19,15 +19,22 @@ class FileReader(IFileReader):
     def on_input_change(self, callback: Callable[[InputType], None]) -> None:
         self._on_input_change = callback
 
-    def read_lines(self, path: Path) -> Generator[Union[str, bytes], None, None]:
+    def read_lines(
+        self, path: Path
+    ) -> Generator[Union[str, bytes], None, None]:
         try:
             yield from self._read_lines(path)
         except UnicodeDecodeError:
             with path.open("rb") as file:
-                print(f"grep: unicode decode error. Trying to read {path} as binary")
+                print(
+                    f"grep: unicode decode error. "
+                    f"Trying to read {path} as binary"
+                )
                 yield from self._read_as_binary(file)
 
-    def _read_lines(self, path: Path) -> Generator[Union[str, bytes], None, None]:
+    def _read_lines(
+        self, path: Path
+    ) -> Generator[Union[str, bytes], None, None]:
         with path.open("rb") as file:
             if self._is_binary_file(file):
                 yield from self._read_as_binary(file)
