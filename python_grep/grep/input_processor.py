@@ -43,21 +43,9 @@ class InputProcessorTemplate(IInputProcessor):
 
     @abstractmethod
     def _process(self, path: Path) -> Generator[ProcessingOutput, None, None]:
-        """
-        Internal method for actual processing of the input data.
-
-        :param Path path: The path to the input data file.
-        :yield: A generator of ProcessingOutput objects.
-        :rtype: Generator[ProcessingOutput, None, None].
-        """
+        pass
 
     def _switch_input_type(self, input_type: InputType) -> None:
-        """
-        Switch the object's input type and pattern matcher
-        for the newly read file.
-
-        :param InputType input_type: Traversed file input type.
-        """
         if input_type != self._input_type:
             self._pattern_matcher = self._pattern_matcher_map[input_type]
             self._input_type = input_type

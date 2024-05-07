@@ -11,7 +11,7 @@ from python_grep.grep.grep import (
     LineMatchGrep,
 )
 from python_grep.grep.input_processor import InputTypeToPatternMatcherMapping
-from python_grep.grep.output import create_output_message
+from python_grep.grep.output import OutputMessageBuilder
 from python_grep.match import BinaryPatternMatcher, TextPatternMatcher
 from python_grep.storage.base import InputType
 from python_grep.storage.file_reader import FileReader
@@ -34,7 +34,9 @@ def create_grep_from_cli_args(parsed_cli_args: Namespace) -> Grep:
         context.file_paths,
         context.output_control_options.recursive,
     )
-
+    output_message_builder = OutputMessageBuilder(
+        context.output_control_options
+    )
     text_pattern_matcher = TextPatternMatcher(
         context.patterns, context.pattern_matching_options
     )
@@ -50,7 +52,7 @@ def create_grep_from_cli_args(parsed_cli_args: Namespace) -> Grep:
         return LineMatchCounterGrep(
             file_reader,
             path_resolver,
-            create_output_message,
+            output_message_builder,
             file_type_to_pattern_matcher_map,
             context,
         )
@@ -58,7 +60,7 @@ def create_grep_from_cli_args(parsed_cli_args: Namespace) -> Grep:
         return BeforeContextLineMatchGrep(
             file_reader,
             path_resolver,
-            create_output_message,
+            output_message_builder,
             file_type_to_pattern_matcher_map,
             context,
         )
@@ -66,7 +68,7 @@ def create_grep_from_cli_args(parsed_cli_args: Namespace) -> Grep:
         return AfterContextLineMatchGrep(
             file_reader,
             path_resolver,
-            create_output_message,
+            output_message_builder,
             file_type_to_pattern_matcher_map,
             context,
         )
@@ -74,7 +76,7 @@ def create_grep_from_cli_args(parsed_cli_args: Namespace) -> Grep:
         return LineMatchGrep(
             file_reader,
             path_resolver,
-            create_output_message,
+            output_message_builder,
             file_type_to_pattern_matcher_map,
             context,
         )

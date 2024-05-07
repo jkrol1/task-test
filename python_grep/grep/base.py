@@ -19,6 +19,22 @@ class ICommand(ABC):
         pass
 
 
+class IOutputMessageBuilder(ABC):
+    """Interface for output message builders."""
+
+    @abstractmethod
+    def create(self, processing_output: ProcessingOutput) -> str:
+        """
+        Create an output message based on processing output.
+
+        :param ProcessingOutput processing_output: The processing output.
+        :return: Output message.
+        :rtype: str.
+        """
+
+        pass
+
+
 class IInputProcessor(ABC):
     """Interface for input processors. Input processors
     are responsible for orchestrating pattern matching and
