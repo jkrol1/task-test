@@ -16,7 +16,7 @@ class OutputMessageBuilder(IOutputMessageBuilder):
     output control options and processing output.
 
     :param OutputControlOptions output_control_options:
-    Options for output control for reading files.
+    Options for output control.
     """
 
     def __init__(self, output_control_options: OutputControlOptions) -> None:
