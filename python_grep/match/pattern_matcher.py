@@ -108,14 +108,14 @@ class TextPatternMatcher(PatternMatcherTemplate[str]):
     def _get_matched_positions(
         self, input_val: str, compiled_regex: re.Pattern[str]
     ) -> Optional[List[MatchPosition]]:
-        is_match_found = self._is_match_found(input_val, compiled_regex)
-        if self._options.invert_match and not is_match_found:
+        matches = [
+            MatchPosition(match.start(), match.end())
+            for match in compiled_regex.finditer(input_val)
+        ]
+        if self._options.invert_match and not matches:
             return [MatchPosition(0, 0)]
-        elif is_match_found and not self._options.invert_match:
-            return [
-                MatchPosition(match.start(), match.end())
-                for match in compiled_regex.finditer(input_val)
-            ]
+        elif matches and not self._options.invert_match:
+            return matches
         else:
             return None
 
