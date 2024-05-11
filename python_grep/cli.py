@@ -96,14 +96,17 @@ def merge_pattern_related_args(args: Namespace) -> Namespace:
     :raises ArgumentTypeError: Raises exception if no patterns are provided.
     """
 
-    if args.pattern is None and args.patterns is None:
+    if not args.pattern and not args.patterns:
         raise ArgumentTypeError(
             "Either -e option or pattern argument is required."
         )
-    elif args.patterns is None:
+    elif not args.patterns:
         args.patterns = [rf"{args.pattern}"]
-    else:
-        args.files.insert(0, rf"{args.pattern}")
+    elif args.patterns and args.pattern:
+        if not args.files:
+            args.files.insert(0, rf"{args.pattern}")
+        else:
+            args.patterns.append(args.pattern)
 
     return args
 
