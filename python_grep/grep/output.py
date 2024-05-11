@@ -68,24 +68,16 @@ class OutputMessageBuilder(IOutputMessageBuilder):
     def _colorize(
         self, line: str, match_positions: List[MatchPosition]
     ) -> str:
-
-        return self._colorize_tail_recursive(line, match_positions, 0)
-
-    def _colorize_tail_recursive(
-        self, line: str, match_positions: List[MatchPosition], index: int
-    ) -> str:
-        if not match_positions:
-            return line[index:]
-
-        match_position = match_positions[0]
-        formatted_string = line[
-            index : match_position.start
-        ] + self._colorize_text(
-            line[match_position.start : match_position.end], Color.GREEN
-        )
-        return formatted_string + self._colorize_tail_recursive(
-            line, match_positions[1:], match_position.end
-        )
+        formatted_string = ""
+        index = 0
+        for match_position in match_positions:
+            formatted_string += line[index : match_position.start]
+            formatted_string += self._colorize_text(
+                line[match_position.start : match_position.end], Color.GREEN
+            )
+            index = match_position.end
+        formatted_string += line[index :]
+        return formatted_string
 
     @staticmethod
     def _colorize_text(text, color) -> str:
