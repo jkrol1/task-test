@@ -19,12 +19,12 @@ class FileReader(IFileReader):
         )
 
     def before_file_traverse_hook(
-        self, callback: Callable[[InputType], None]
+            self, callback: Callable[[InputType], None]
     ) -> None:
         self._before_file_traverse = callback
 
     def read_lines(
-        self, path: Path
+            self, path: Path
     ) -> Generator[Union[str, bytes], None, None]:
         try:
             yield from self._read_lines(path)
@@ -37,7 +37,7 @@ class FileReader(IFileReader):
                 yield from self._read_as_binary(file)
 
     def _read_lines(
-        self, path: Path
+            self, path: Path
     ) -> Generator[Union[str, bytes], None, None]:
         with path.open("rb") as file:
             if self._is_binary_file(file):
@@ -56,16 +56,14 @@ class FileReader(IFileReader):
         return False
 
     def _read_as_text(self, file) -> Generator[str, None, None]:
-        file.seek(0)
         self._notify_before_file_traverse(InputType.TEXT)
         for line in file:
             yield line.decode(self._encoding).rstrip("\n")
 
     def _read_as_binary(self, file) -> Generator[bytes, None, None]:
-        file.seek(0)
         self._notify_before_file_traverse(InputType.BINARY)
-        for line in file:
-            yield line
+        while chunk := file.read(1024):
+            yield chunk
 
     def _notify_before_file_traverse(self, file_type: InputType) -> None:
         if self._before_file_traverse:
